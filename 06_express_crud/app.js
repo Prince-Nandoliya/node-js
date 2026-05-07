@@ -5,7 +5,8 @@ const app = express();
 
 const tasklist = [
     { id: 1, task: "error handling", message: "Implement custom error handling using HttpError" },
-    { id: 2, task: "learn middleware", message: "Understa nd how middleware works in Express" }
+    { id: 2, task: "learn middleware", message: "Understand how middleware works in Express" },
+    
 ]
 
 
@@ -54,32 +55,6 @@ app.post("/addtask",(req,res,next)=>{
     res.status(201).json({success:true,message:"new task added successfully",newTask})
 
 })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 const port = 5000;
 
