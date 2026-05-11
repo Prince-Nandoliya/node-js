@@ -60,8 +60,8 @@ app.post("/addtask",(req,res,next)=>{
 
 //delete
 
-app.delete("tasklist/:id",(req,res,next)=>{
-    const id = Number(res.params.id)
+app.delete("/tasklist/:id",(req,res,next)=>{
+    const id = Number(req.params.id)
 
     const index = tasklist.findIndex((t)=> t.id === id)
 
@@ -75,6 +75,27 @@ app.delete("tasklist/:id",(req,res,next)=>{
         success:true,
         message: "task data deleted successfully"
     })
+})
+
+//update
+
+app.put("/updateTask/:id",(req,res,next)=>{
+    const id = Number(req.params.id)
+
+    const taskdataindex = tasklist.findIndex((t)=> t.id === id)
+
+    if(taskdataindex === -1){
+        return next(new HttpError("task data not found with this id",404))
+    }
+    const{task,message} = req.body
+
+    if(!task || !message){
+        return next(new HttpError("task or message is reuired",400))
+    }
+
+    tasklist[taskdataindex] = {...tasklist[taskdataindex],task,message}
+
+    res.status(200).json({success:true,message:"task data update successfully",updateTask:tasklist[taskdataindex]})
 })
 
 //err

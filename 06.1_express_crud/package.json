@@ -1,0 +1,20 @@
+{
+  "type": "module",
+  "dependencies": {
+    "express": "^5.2.1"
+  },
+  "name": "06.1_express_crud",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node bike.js",
+    "dev": "node --watch bike"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+  
+}

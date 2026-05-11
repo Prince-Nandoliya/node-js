@@ -1,0 +1,21 @@
+{
+  "type": "module",
+  "dependencies": {
+    "express": "^5.2.1",
+    "init": "^0.1.2"
+  },
+  "name": "06_express_crud",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node all.js",
+    "dev": "node --watch all.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+  
+}
