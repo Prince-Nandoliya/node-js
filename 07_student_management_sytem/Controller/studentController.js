@@ -34,15 +34,33 @@ const getAllStudentData = async (req, res, next) => {
         const students = await Student.find({})
 
         if (students.length <= 0) {
-           return res.status(200).json({ success: true, message: "no student data found" })
+            return res.status(200).json({ success: true, message: "no student data found" })
         }
 
-        res.status(200).json({ success: true, total: students.length, message: "student data fetced successfully",students })
+        res.status(200).json({ success: true, total: students.length, message: "student data fetced successfully", students })
 
     } catch (error) {
-        next (new HttpError(error.message,500))
+        next(new HttpError(error.message, 500))
 
     }
 }
 
-export default {add,getAllStudentData}
+const deletestudent = async (req, res) => {
+    try {
+        const id = req.params.id
+        const student = await Student.findByIdAndDelete(id)
+
+        if (!student) {
+            res.status(404).json({ success: false, message: "no student found" })
+        }
+        res.status(200).json({ success: true, message: "student delte succesfully" })
+
+    } catch (error) {
+
+        res.status(500).json({
+            message: error.message
+        })
+    }
+
+}
+export default { add, getAllStudentData, deletestudent }

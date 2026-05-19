@@ -21,6 +21,8 @@ router.post("/add",studentController.add)
 
 router.get("/getAllStudents",studentController.getAllStudentData)
 
+router.delete("/:id",studentController.deletestudent)
+
 export default router
 
 
