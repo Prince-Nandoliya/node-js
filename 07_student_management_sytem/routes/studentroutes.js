@@ -23,6 +23,8 @@ router.get("/getAllStudents",studentController.getAllStudentData)
 
 router.delete("/:id",studentController.deletestudent)
 
+router.patch("/:id",studentController.Studentbyid)
+
 export default router
 
 
