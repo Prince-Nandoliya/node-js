@@ -102,17 +102,6 @@ const updatestudent = async (req, res, next) => {
 
     }
 }
-
-
-
-
-
-
-
-export default { add, getAllStudentData, deletestudent,updatestudent }
-
-
-
 const Studentbyid = async (req,res) =>{
     try {
         
