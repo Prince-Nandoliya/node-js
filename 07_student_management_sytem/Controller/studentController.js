@@ -53,7 +53,7 @@ const deletestudent = async (req, res) => {
         if (!student) {
             res.status(404).json({ success: false, message: "no student found" })
         }
-        res.status(200).json({ success: true, message: "student delte succesfully" })
+       return res.status(200).json({ success: true, message: "student delte succesfully" })
 
     } catch (error) {
 
@@ -63,4 +63,47 @@ const deletestudent = async (req, res) => {
     }
 
 }
-export default { add, getAllStudentData, deletestudent }
+
+const updatestudent = async (req, res, next) => {
+    try {
+
+        const id = req.params.id
+        const student = await Student.findById(id)
+
+        if (!student) {
+            return next(new HttpError("student not found with this id", 404))
+        }
+        const update = Object.keys(req.body)
+
+        const allowfields = ["name","email","mobileNumber"]
+
+        const isValidUpdate = update.every((fields)=>
+        allowfields.includes(fields)
+        );
+
+        if(!isValidUpdate){
+            return next(new HttpError("invalid update fields",404))
+        }
+
+        update.forEach((fields)=>{
+            student[fields] = req.body[fields]
+        })
+
+        await student.save()
+
+        res.status(200).json({success:true,message: "student update successfully",data:student})
+
+
+    } catch (error) {
+        res.status(500).json({message: error.message})
+
+    }
+}
+
+
+
+
+
+
+
+export default { add, getAllStudentData, deletestudent,updatestudent }
