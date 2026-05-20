@@ -121,5 +121,5 @@ const Studentbyid = async (req,res) =>{
         
     }
 }
-export default { add, getAllStudentData, deletestudent, Studentbyid}
+export default { add, getAllStudentData, deletestudent, Studentbyid,updatestudent}
 

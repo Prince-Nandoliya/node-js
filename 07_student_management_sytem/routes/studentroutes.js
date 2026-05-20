@@ -26,7 +26,7 @@ router.delete("/:id",studentController.deletestudent)
 
 router.patch("/:id",studentController.updatestudent)
 
-router.patch("/:id",studentController.Studentbyid)
+router.get("/:id",studentController.Studentbyid)
 
 export default router
 
