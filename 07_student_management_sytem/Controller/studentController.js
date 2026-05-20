@@ -53,7 +53,10 @@ const deletestudent = async (req, res) => {
         if (!student) {
             res.status(404).json({ success: false, message: "no student found" })
         }
+
        return res.status(200).json({ success: true, message: "student delte succesfully" })
+
+        res.status(200).json({ success: true, message: "student delete succesfully" })
 
     } catch (error) {
 
@@ -107,3 +110,27 @@ const updatestudent = async (req, res, next) => {
 
 
 export default { add, getAllStudentData, deletestudent,updatestudent }
+
+
+
+const Studentbyid = async (req,res) =>{
+    try {
+        
+        const id = req.params.id
+        const student = await Student.findById(id)
+
+        if (!student){
+            res.status(404).json({success:false,message: "student not found"})
+            
+       }
+       res.status(200).json({success:true, message:"student found successfully",}) 
+        
+    } catch (error) {
+        res.status(500).json({
+            message: error.message
+        })
+        
+    }
+}
+export default { add, getAllStudentData, deletestudent, Studentbyid}
+
