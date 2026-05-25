@@ -70,9 +70,9 @@ const studentupdate = async function (req,res,next){
   try {
     
     const id = req.params.id
-    const student = await student.findById(id)
+    const studentData = await student.findById(id)
 
-    if(!student){
+    if(!studentData){
       return next(new HttpError("student not found with this id",404))
 
     }
@@ -89,12 +89,12 @@ const studentupdate = async function (req,res,next){
     }
 
     update.forEach((fields)=>{
-      student[fields] = req.body[fields]
+      studentData[fields] = req.body[fields]
     })
 
-    await student.save()
+    await studentData.save()
 
-    res.status(200).json({success:true,message:"student update successfully",data:student})
+    res.status(200).json({success:true,message:"student update successfully",data:studentData})
 
   } catch (error) {
     res.status(500).json({message:error.message})

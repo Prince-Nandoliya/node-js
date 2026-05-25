@@ -1,4 +1,4 @@
-import express, { application } from "express";
+import express from "express";
 import HttpError from "./middleware/httperror.js";
 import checkRoll from "./middleware/checkroll.js";
 import helmet from "helmet"
