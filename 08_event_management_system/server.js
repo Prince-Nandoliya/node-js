@@ -6,6 +6,8 @@
 
     import mongoose from "mongoose"
 
+    import router from "./routes/eventrotes.js"
+
     import dotenv from "dotenv"
     
     dotenv.config({path: "./.env"})
@@ -19,6 +21,8 @@
     app.get("/", (req, res, next) => {
         res.send("hello from server")
     })
+
+    app.use("/event",router)
 
     app.use((req, res, next) => {
         return next(new HttpError("requested route are not found", 404))

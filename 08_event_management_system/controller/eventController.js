@@ -2,14 +2,16 @@ import fs from "fs"
 import HttpError from "../middleware/HttpError.js";
 import Event from "../model/eventmodel.js";
 
-const Event = async (req,res,next)=>{
+const addEvent = async (req, res, next) => {
     try {
 
-        const {eventName,eventDate,eventVenue,description,ticketPrice} = req.body
-  
-        const eventBanner = req.files.eventBanner?.[0]
-        const eventPoster = req.files.eventPoster || []
-        const eventSpeaker = req.files.eventSpeaker || []
+        const { eventName, eventDate, eventVenue, description, ticketPrice } = req.body
+
+
+        const eventBanner = req.files?.eventBanner?.[0]?.path || null
+        const eventPoster = req.files?.eventPoster?.map((file)=> file.path) || null
+        const eventSpeaker = req.files?.eventSpeaker?.map((file) => file.path) || null
+
 
         const newEvent = new Event({
 
@@ -18,22 +20,23 @@ const Event = async (req,res,next)=>{
             eventVenue,
             description,
             ticketPrice,
+            eventBanner,
+            eventPoster,
+            eventSpeaker    
 
-            eventBanner: eventBanner?.path || null,
-            eventPoster: eventPoster.map((file) => file.path) || null,
-            eventSpeaker : eventSpeaker.map((file)=> file.path) || null
+
         })
         await newEvent.save()
 
-        res.status(200).json({success:true,message:"Event added success",newEvent})
+        res.status(200).json({ success: true, message: "Event added success", newEvent })
 
 
 
-        
+
     } catch (error) {
-        next(new HttpError(error.message,500))
+        next(new HttpError(error.message, 500))
     }
-    
+
 }
 
-export default {Event}
+export default { addEvent }
