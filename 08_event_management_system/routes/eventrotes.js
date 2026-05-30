@@ -22,4 +22,9 @@ router.post("/add",uploads.fields([
 ]),
 eventController.addEvent,
 );
+
+router.get("/allEvent",eventController.getallEvent)
+
+router.get("/:id",eventController.getEvent)
+
 export default router

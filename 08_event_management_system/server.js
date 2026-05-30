@@ -24,7 +24,7 @@
 
     app.use("/event",router)
 
-    app.use((req, res, next) => {
+    app.use((req, res, next) => { 
         return next(new HttpError("requested route are not found", 404))
     })
 

@@ -36,7 +36,45 @@ const addEvent = async (req, res, next) => {
     } catch (error) {
         next(new HttpError(error.message, 500))
     }
+}
+
+const getallEvent = async (req,res,next)=>{
+
+    try {
+        
+        const EventData = await Event.find({})
+
+        if(!EventData){
+            return next (new HttpError("no EventData found",404))
+        }
+
+        res.status(200).json({success:true,total:EventData.length,message:"Event Data",EventData})
+
+    } catch (error) {
+        next(new HttpError(error.message,500))
+        
+    }
 
 }
 
-export default { addEvent }
+const getEvent = async (req,res,next)=>{
+
+    try {
+
+        const id = req.params.id
+
+        const EventData = await Event.findById(id)
+
+        if(!EventData){
+            return next(new HttpError("no EventData found with this id",404))
+
+        }
+
+        res.status(200).json({sueccess:true,message:"Event data found successfully",EventData})
+        
+    } catch (error) {
+        next(new HttpError(error.message,500))
+    }
+}
+
+export default { addEvent,getallEvent,getEvent }
