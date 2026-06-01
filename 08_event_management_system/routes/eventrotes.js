@@ -27,4 +27,6 @@ router.get("/allEvent",eventController.getallEvent)
 
 router.get("/:id",eventController.getEvent)
 
+router.delete("/:id",eventController.deleteEvent)
+
 export default router
