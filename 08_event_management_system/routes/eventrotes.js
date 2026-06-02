@@ -29,4 +29,21 @@ router.get("/:id",eventController.getEvent)
 
 router.delete("/:id",eventController.deleteEvent)
 
+router.patch("/:id",uploads.fields([
+    {
+        name: "eventBanner",
+        maxCount:1
+    },
+    {
+        name:"eventPoster",
+        maxCount:2  
+    },
+    {
+        name: "eventSpeaker",
+        maxCount:2
+    }
+]),
+eventController.updateEvent
+)
+
 export default router
