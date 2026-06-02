@@ -84,10 +84,10 @@ const deleteEvent = async (req, res, next) => {
 
         const id = req.params.id
 
-        const DeleteEvent = await Event.findById(id)
+        const DeleteEvent = await Event.findByIdAndDelete(id)
 
         if (!DeleteEvent) {
-            next(new HttpError("falied to delete event", 404))
+            return next(new HttpError("falied to delete event", 404))
         }
 
         const fileDelete = [
@@ -105,7 +105,6 @@ const deleteEvent = async (req, res, next) => {
             }
         })
 
-        const deleteEvent = await Event.findByIdAndDelete(id)
 
         return res.status(200).json({ success: true, message: "Event deleted succeddfully" })
 
@@ -122,17 +121,17 @@ const updateEvent = async (req, res, next) => {
     try {
 
         const id = req.params.id
-      
+
         const EventData = await Event.findById(id)
 
-        if(!EventData){
-            return next(new HttpError("event not found with this id",404))
+        if (!EventData) {
+            return next(new HttpError("event not found with this id", 404))
 
         }
 
         const updates = Object.keys(req.body)
 
-        const allowedfiled  = [
+        const allowedfiled = [
             "eventName",
             "eventDate",
             "eventVenue",
@@ -140,60 +139,53 @@ const updateEvent = async (req, res, next) => {
             "ticketPrice"
         ]
 
-        const isValidUpdate = updates.every((filed)=>{
+        const isValidUpdate = updates.every((filed) => {
             return allowedfiled.includes(filed)
         });
 
-        if(!isValidUpdate){
-            return next(new HttpError("only allowfiled can be updated",400))
+        if (!isValidUpdate) {
+            return next(new HttpError("only allowfiled can be updated", 400))
 
         }
-
-        const eventBanner = req.files?.eventBanner?.[0]?.path || null
-        const eventPoster = req.files?.eventPoster?.map((file) => file.path) || null
-        const eventSpeaker = req.files?.eventSpeaker?.map((file) => file.path) || null
-          
-        if(eventBanner){
-            if(fs.existsSync(EventData.eventBanner)){
+        if (req.files?.eventBanner) {
+            if (EventData.eventBanner && fs.existsSync(EventData.eventBanner)) {
                 fs.unlinkSync(EventData.eventBanner)
             }
 
-            EventData.eventBanner = eventBanner
+            EventData.eventBanner = req.files.eventBanner[0].path;
         }
-
-        if(eventPoster){
-            EventData.eventPoster.forEach((file)=>{
-                if(fs.existsSync(file)){
-                    fs.unlinkSync(file)
+        if (req.files?.eventPoster) {
+            EventData.eventPoster.forEach((file) => {
+                if (fs.existsSync(file)) {
+                    fs.unlinkSync(file);
                 }
             })
 
-            EventData.eventPoster = eventPoster
+            EventData.eventPoster = req.files?.eventPoster?.map((file) => file.path) || null
         }
 
-        if(eventSpeaker){
+        if(req.files?.eventSpeaker){
             EventData.eventSpeaker.forEach((file)=>{
                 if(fs.existsSync(file)){
                     fs.unlinkSync(file)
                 }
             })
 
-            EventData.eventSpeaker = eventSpeaker
+            EventData.eventSpeaker = req.files?.eventSpeaker?.map((file)=> file.path) || null
         }
 
-        updates.forEach((update)=>{
-            EventData[update] = req.body[update]
-        })
         await EventData.save()
+
         res.status(200).json({
             success:true,
-            message:"Event update successfully",
+            message:"event data updated successfully",
             EventData
         })
+
 
     } catch (error) {
         next(new HttpError(error.message, 500))
     }
 }
 
-export default { addEvent, getallEvent, getEvent, deleteEvent,updateEvent }
+export default { addEvent, getallEvent, getEvent, deleteEvent, updateEvent }
