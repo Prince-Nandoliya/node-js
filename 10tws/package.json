@@ -2,12 +2,10 @@
   "dependencies": {
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
-    "mongoose": "^9.6.3",
-    "multer": "^2.1.1",    
+    "mongoose": "^9.7.0",
     "nodemon": "^3.1.14"
-    
   },
-  "name": "09_traveling_system",
+  "name": "10tws",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -21,5 +19,4 @@
   "author": "",
   "license": "ISC",
   "type": "module"
-  
 }
