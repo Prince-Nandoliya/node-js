@@ -50,11 +50,11 @@ const login = async(req,res,next)=>{
 
         const users = await user.findByCredentials(email,password)
 
-        if(!user){
+        if(!users){
             next(new HttpError("unable to login"))
         }
 
-        res.status(200).json({success:true,user})
+        res.status(200).json({success:true,users})
         
     } catch (error) {
         next(new HttpError(error.message))

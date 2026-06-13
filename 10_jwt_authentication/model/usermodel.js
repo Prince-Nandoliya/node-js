@@ -13,14 +13,15 @@ const userSchema = new mongoose.Schema({
     },
     email: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     password: {
 
         type: String,
         required: true,
         minLength: 6,
-        Validate: (value) => {
+        validate: (value) => {
             if (value.toLowerCase() === "password") {
                 return "password can't contain password word as password"
             }
@@ -28,24 +29,24 @@ const userSchema = new mongoose.Schema({
     }
 }, { timestamps: true })
 
-userSchema.pre("save",async function(){
+userSchema.pre("save", async function () {
     const user = this
 
-    if(user.isModified("password")){
-        user.password = await bcrypt.hash(user.password,10)
+    if (user.isModified("password")) {
+        user.password = await bcrypt.hash(user.password, 10)
     }
 })
 
-userSchema.statics.findByCredentials = async function (email,password){
+userSchema.statics.findByCredentials = async function (email, password) {
     try {
-        
-        const user = await this.findOne({email})
-        if(!user){
+
+        const user = await this.findOne({ email })
+        if (!user) {
             throw new Error("unable to login")
         }
 
-        const isMatched = await bcrypt.compare(password,user.password)
-        if(!isMatched){
+        const isMatched = await bcrypt.compare(password, user.password)
+        if (!isMatched) {
             throw new Error("unable to login")
         }
 
@@ -53,7 +54,7 @@ userSchema.statics.findByCredentials = async function (email,password){
 
 
     } catch (error) {
-  throw new Error(error.message)        
+        throw new Error(error.message)
     }
 }
 
