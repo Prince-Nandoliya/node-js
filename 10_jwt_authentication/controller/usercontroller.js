@@ -50,6 +50,8 @@ const login = async(req,res,next)=>{
 
         const users = await user.findByCredentials(email,password)
 
+        const token = await users.genrateAuthToken()
+
         if(!users){
             next(new HttpError("unable to login"))
         }
@@ -58,6 +60,23 @@ const login = async(req,res,next)=>{
         
     } catch (error) {
         next(new HttpError(error.message))
+    }
+}
+
+const authtoken = async(req,res,next)=>{
+    try {
+
+        const user = req.body
+
+        if(!user){
+            return next(new HttpError("unable to login",401))
+        }
+        res.status(200).json({success:true,user})
+        
+
+
+    } catch (error) {
+        next(new HttpError(error.message,500))
     }
 }
 

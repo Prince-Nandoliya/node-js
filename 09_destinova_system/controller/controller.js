@@ -110,15 +110,15 @@ const updatepackage = async (req, res, next) => {
             allowed.includes(field)
         )
 
-        if(!isAllowed){
-            return next(new HttpError("only allowed field can update",400))
+        if (!isAllowed) {
+            return next(new HttpError("only allowed field can update", 400))
         }
 
-        update.forEach((update)=>{
+        update.forEach((update) => {
             updatepackage[update] = req.body[update]
         })
 
-        if(req.file){
+        if (req.file) {
             await cloudinary.uploader.destroy(updatepackage.cloudinary_id)
 
             updatepackage.packageimg = req.file?.path
@@ -127,10 +127,10 @@ const updatepackage = async (req, res, next) => {
 
         await updatepackage.save()
 
-        res.status(200).json({success:true,message:"package update successfully",updatepackage})
+        res.status(200).json({ success: true, message: "package update successfully", updatepackage })
     } catch (error) {
         next(new HttpError(error.message))
 
     }
 }
-export default { add, getall, getid, deletepackage,updatepackage }
+export default { add, getall, getid, deletepackage, updatepackage }

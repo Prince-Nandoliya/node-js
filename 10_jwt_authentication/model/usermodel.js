@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
-import bcrypt from "bcryptjs"
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken"
 
 import HttpError from "../middleware/HttpError.js";
 
@@ -26,7 +27,15 @@ const userSchema = new mongoose.Schema({
                 return "password can't contain password word as password"
             }
         }
-    }
+    },
+    tokens:[
+        {
+            token:{
+                type: String,
+                required:true
+            }
+        }
+    ]
 }, { timestamps: true })
 
 userSchema.pre("save", async function () {
@@ -57,6 +66,42 @@ userSchema.statics.findByCredentials = async function (email, password) {
         throw new Error(error.message)
     }
 }
+
+
+//auth token
+
+userSchema.methods.genrateAuthToken = async function(){
+    try {
+        
+        const user = this
+
+        console.log("jwtSecret",process.env.JWT_SECRET)
+
+        const token = jwt.sign(
+            {_id: user._id.toString()},
+            process.env.JWT_SECRET,
+            { expiresIn : "6d"}
+        )
+        console.log("token=",token)
+
+        if(!token){
+            throw new Error("fail to genrate token")
+        }
+
+        user.tokens = user.tokens.concat({token})
+
+        await user.save()
+
+        return token
+
+
+    } catch (error) {
+        throw new Error(error.message)
+        
+    }
+}
+
+
 
 const user = mongoose.model("user", userSchema)
 
