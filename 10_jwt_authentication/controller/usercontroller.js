@@ -80,4 +80,20 @@ const authtoken = async(req,res,next)=>{
     }
 }
 
-export default { add, getalluser,login }
+
+const authlogin = async(req,res,next)=>{
+    try {
+        
+        const user = req.user
+
+        if(!user){
+            return next(new HttpError("unable to login"))
+        }
+
+        res.status(200).json({success:true,user})
+
+    } catch (error) {
+        next(new HttpError(error.message,500))
+    }
+}
+export default { add, getalluser,login,authlogin }
