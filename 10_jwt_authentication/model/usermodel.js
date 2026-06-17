@@ -28,11 +28,11 @@ const userSchema = new mongoose.Schema({
             }
         }
     },
-    tokens:[
+    tokens: [
         {
-            token:{
+            token: {
                 type: String,
-                required:true
+                required: true
             }
         }
     ]
@@ -70,25 +70,25 @@ userSchema.statics.findByCredentials = async function (email, password) {
 
 //auth token
 
-userSchema.methods.genrateAuthToken = async function(){
+userSchema.methods.genrateAuthToken = async function () {
     try {
-        
+
         const user = this
 
-        console.log("jwtSecret",process.env.JWT_SECRET)
+        console.log("jwtSecret", process.env.JWT_SECRET)
 
         const token = jwt.sign(
-            {_id: user._id.toString()},
+            { _id: user._id.toString() },
             process.env.JWT_SECRET,
-            { expiresIn : "6d"}
+            { expiresIn: "6d" }
         )
-        console.log("token=",token)
+        console.log("token=", token)
 
-        if(!token){
+        if (!token) {
             throw new Error("fail to genrate token")
         }
 
-        user.tokens = user.tokens.concat({token})
+        user.tokens = user.tokens.concat({ token })
 
         await user.save()
 
@@ -97,7 +97,7 @@ userSchema.methods.genrateAuthToken = async function(){
 
     } catch (error) {
         throw new Error(error.message)
-        
+
     }
 }
 
