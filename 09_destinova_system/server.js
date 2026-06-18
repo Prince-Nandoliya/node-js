@@ -23,7 +23,7 @@ app.use((req,res,next)=>{
 app.use((Error,req,res,next)=>{
 
     if(res.headersSent){
-        return console.log("Database connection failed")
+        return console.log("Data base connection failed")
     }
 
     res.status(Error.statusCode || 500).json({message:Error.message || "something went worng"})
