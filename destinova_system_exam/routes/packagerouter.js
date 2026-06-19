@@ -8,4 +8,7 @@ router.post("/add",uploads.single("packageimg"),packagecontroller.add)
 
 router.get("/all",packagecontroller.getall)
 
+router.delete("/:id",packagecontroller.deletepackage)
+
+
 export default router
