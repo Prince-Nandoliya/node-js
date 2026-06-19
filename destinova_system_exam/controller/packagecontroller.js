@@ -59,4 +59,49 @@ const deletepackage = async (req, res, next) => {
         next(new HttpError(error.message))
     }
 }
-export default { add, getall, deletepackage }
+
+const updatepackage = async (req, res, next) => {
+    try {
+
+        const id = req.params.id
+
+        const updatepackage = await Package.findById(id)
+
+        if (!updatepackage) {
+
+            res.status(404).json({ success: false, message: "fail to update" })
+        }
+
+        const update = Object.keys(req.body)
+
+        const allowed = ["packageName", "packagePrice", "packageStartDate", "packageEndDate"]
+
+        const isAllowed = update.every((field) =>
+            allowed.includes(field)
+        )
+
+        if (!isAllowed) {
+            return next(new HttpError("only allowed field can update", 400))
+        }
+
+        update.forEach((update) => {
+            updatepackage[update] = req.body[update]
+        })
+
+        if (req.file) {
+
+            await cloudinary.uploader.destroy(updatepackage.cloudinary_id)
+
+            updatepackage.packageimg = req.file?.path
+            updatepackage.cloudinary_id = req.file.filename
+        }
+
+        await updatepackage.save()
+
+        res.status(200).json({ success: true, message: "package update successfully", updatepackage })
+    } catch (error) {
+        next(new HttpError(error.message))
+
+    }
+}
+export default { add, getall, deletepackage, updatepackage }
