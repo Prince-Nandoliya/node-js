@@ -102,6 +102,25 @@ userSchema.methods.genrateAuthToken = async function () {
 }
 
 
+userSchema.methods.toJSON = function(){
+
+    const user = this
+
+    console.log("user",user)
+
+    const userObject = user.toObject();
+
+    console.log("userObject",userObject)
+
+    delete userObject.password;
+
+    delete userObject.tokens;
+
+
+    delete userObject.__v
+
+    return userObject
+}
 
 const user = mongoose.model("user", userSchema)
 
