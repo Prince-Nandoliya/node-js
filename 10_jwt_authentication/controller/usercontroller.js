@@ -1,4 +1,3 @@
-
 import HttpError from "../middleware/HttpError.js"
 import user from "../model/usermodel.js"
 

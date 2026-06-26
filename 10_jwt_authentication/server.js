@@ -22,6 +22,15 @@ app.use((err,req,res,next)=>{
         message:err.message
     })
 })
+app.use((error, req, res, next) => {
+  if (res.headersSent) {
+    return next(new httpError(error.message));
+  }
+
+  res
+    .status(error.statusCode || 500)
+    .json({ message: error.message || "internal error" });
+});
 const port = 5000
 
 async function server() {
