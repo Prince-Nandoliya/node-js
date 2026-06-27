@@ -3,12 +3,13 @@ import HttpError from "./middleware/HttpError.js"
 import connectDB from "./config/db.js"
 import dotenv from "dotenv"
 import router from "./routes/userrouter.js"
+import pasport from "./config/passport.js"
 
 dotenv.config({ path: "./.env" })
 const app = express()
 
 app.use("/auth",router)
-
+app.use(pasport.initialize())
 app.use(express.json())
 app.set("view engine", "ejs")
 

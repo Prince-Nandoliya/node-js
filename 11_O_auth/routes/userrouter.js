@@ -9,9 +9,14 @@ router.get("/login", (req, res) => {
     res.render("login")
 })
 
-router.get("/googel", passport.authenticate("googel", {
+router.get("/google", passport.authenticate("google", {
     scope: ["email", "profile"],
 }),
 )
+
+
+router.get("/google/login",passport.authenticate("google",{failureRedirect:"/"}),(req,res)=>{
+    res.send("this is callback url")
+})
 
 export default router

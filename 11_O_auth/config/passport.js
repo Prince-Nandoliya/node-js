@@ -1,17 +1,21 @@
 import dotenv from "dotenv"
 dotenv.config({ path: "./.env" })
 
-import pasport from "passport-google-oauth20"
+import passport from "passport"
+import googlePassport from "passport-google-oauth20"
 
 import user from "../model/usermodel.js"
-import user from "../model/usermodel.js"
 
 
-pasport.use(
-    new GoogleStrategy(
+
+const googleStrategy = googlePassport.Strategy;
+
+
+passport.use(
+    new googleStrategy(
         {
             clientID: process.env.CLIENTID,
-            clientsecret: process.env.CLIENTSECRET,
+            clientSecret: process.env.CLIENTSECRET,
             callbackURL: "http://localhost:5000/auth/google/login"
         },
         async (accessToken, refreshToken, profile, done) => {
@@ -23,7 +27,7 @@ pasport.use(
                     user = await User.create({
                         googelId: profile.id,
                         name: profile.displayName,
-                        email: profile.email[0].value,
+                        email: profile.email[0]?.value,
                     })
                 }
 
@@ -36,16 +40,4 @@ pasport.use(
     )
 )
 
-pasport.newuser((user,done)=>{
-    done(null,user.id)
-})
-
-pasport.Uniqeuser(async(id,done)=>{
-    try {
-        
-        const user = await user.findById(id)
-        done(null,user)
-    } catch (error) {
-        done(error,null)
-    }
-})
+export default passport
