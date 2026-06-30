@@ -17,12 +17,10 @@ router.get("/google", passport.authenticate("google", {
 
 
 router.get("/google/login",passport.authenticate("google",{failureRedirect:"/"}),(req,res)=>{
-    res.redirect("/profile")
+    res.render("profile")
 })
 
 
-router.get("/",(req,res)=>{
-    res.render("profile",{user:req.user})
-})
+
 
 export default router
