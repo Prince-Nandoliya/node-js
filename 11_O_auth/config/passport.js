@@ -21,17 +21,17 @@ passport.use(
         async (accessToken, refreshToken, profile, done) => {
             try {
 
-                let User = await user.findOne({ googelId: profile.id })
+                let existingUser  = await user.findOne({ googelId: profile.id })
 
-                if (!user) {
-                    user = await User.create({
-                        googelId: profile.id,
+                if (!existingUser ) {
+                    existingUser  = await user.create({
+                        googleId: profile.id,
                         name: profile.displayName,
-                        email: profile.email[0]?.value,
+                        email: profile.emails[0]?.value,
                     })
                 }
 
-                return done(null, user)
+                return done(null, existingUser)
 
             } catch (error) {
                 return done(error, null)
@@ -39,5 +39,9 @@ passport.use(
         }
     )
 )
+
+passport.serializeUser((user,done)=>{
+    done(null,user.id)
+})
 
 export default passport

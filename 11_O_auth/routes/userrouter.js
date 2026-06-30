@@ -1,6 +1,7 @@
 import express from "express"
 import passport from "passport"
 import HttpError from "../middleware/HttpError.js"
+import user from "../model/usermodel.js"
 
 const router = express.Router()
 
@@ -16,7 +17,12 @@ router.get("/google", passport.authenticate("google", {
 
 
 router.get("/google/login",passport.authenticate("google",{failureRedirect:"/"}),(req,res)=>{
-    res.send("this is callback url")
+    res.redirect("/profile")
+})
+
+
+router.get("/",(req,res)=>{
+    res.render("profile",{user:req.user})
 })
 
 export default router

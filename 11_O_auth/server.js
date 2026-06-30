@@ -4,16 +4,35 @@ import connectDB from "./config/db.js"
 import dotenv from "dotenv"
 import router from "./routes/userrouter.js"
 import pasport from "./config/passport.js"
+import session from "express-session"
 
 dotenv.config({ path: "./.env" })
 const app = express()
 
-app.use("/auth",router)
-app.use(pasport.initialize())
+
+
 app.use(express.json())
+
+app.use(session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        secure: false,
+        maxAge: 24 * 60 * 60 * 1000
+    }
+})
+)
+
+app.use(pasport.initialize())
+app.use(pasport.session())
+
+app.use("/auth", router)
+app.use("/profile", router)
+
 app.set("view engine", "ejs")
 
-app.get("/",(req,res)=>{
+app.get("/", (req, res) => {
     res.render("home")
 })
 
@@ -22,6 +41,8 @@ app.get("/",(req,res)=>{
 app.use((req, res, next) => {
     next(new HttpError("requested routes are not found"))
 })
+
+
 
 
 app.use((error, req, res, next) => {
