@@ -3,6 +3,7 @@ import HttpError from "./middleware/HttpError.js"
 import connectDB from "./config/db.js"
 import dotenv from "dotenv"
 import router from "./routes/userrouter.js"
+import profileRouter from "./routes/profileRouter.js"
 import pasport from "./config/passport.js"
 import session from "express-session"
 
@@ -12,6 +13,7 @@ const app = express()
 
 
 app.use(express.json())
+
 
 app.use(session({
     secret: process.env.SESSION_SECRET,
@@ -28,12 +30,12 @@ app.use(pasport.initialize())
 app.use(pasport.session())
 
 app.use("/auth", router)
-app.use("/profile", router)
+app.use("/profile", profileRouter)
 
 app.set("view engine", "ejs")
 
 app.get("/", (req, res) => {
-    res.render("home")
+    res.render("home",{user: req.user})
 })
 
 
@@ -47,7 +49,7 @@ app.use((req, res, next) => {
 
 app.use((error, req, res, next) => {
     if (res.headersSent) {
-        return next(new error())
+        return next(error)
     }
 
     res.status(error.statusCode || 500)
