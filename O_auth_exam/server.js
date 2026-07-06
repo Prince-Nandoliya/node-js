@@ -1,16 +1,22 @@
 import express from "express"
 import HttpError from "./middleware/HttpError.js"
 import connectDB from "./config/db.js"
-import dotenv from "dotenv"
 import router from "./routes/userrouter.js"
-import profileRouter from "./routes/profileRouter.js"
-import pasport from "./config/passport.js"
 import session from "express-session"
+import passport from "./config/passport.js"
+import profile from "./routes/profile.js"
 
-dotenv.config({ path: "./.env" })
+import dotenv from "dotenv"
 const app = express()
 
+dotenv.config({path: "./.env"})
 
+
+app.get("/", (req, res) => {
+    res.render("home")
+})
+
+app.set("view engine","ejs")
 
 app.use(express.json())
 
@@ -26,47 +32,38 @@ app.use(session({
 })
 )
 
-app.use(pasport.initialize())
-app.use(pasport.session())
-
-app.use("/auth", router)
-app.use("/profile", profileRouter)
-
-app.set("view engine", "ejs")
-
-app.get("/", (req, res) => {
-    res.render("home",{user: req.user})
-})
-
+app.use(passport.initialize())
+app.use(passport.session())
+app.use("/auth",router)
+app.use("/profile", profile);
 
 
 app.use((req, res, next) => {
-    next(new HttpError("requested routes are not found"))
+    res.status(404).json({message:"requested route not found"})
 })
 
 
-
-
-app.use((error, req, res, next) => {
-    if (res.headersSent) {
-        return next(error)
+app.use((error,req,res,next)=>{  
+    if(res.headerSent){
+        return next(new HttpError(error.message))
     }
-
-    res.status(error.statusCode || 500)
-        .json({ message: error.message || "internal server error" })
-});
+    res.status(error.statusCode || 500).
+    json({message:error.message || "internal server error"})
+})
 
 const port = 5000
 
 
 
+
 async function server() {
+
     try {
 
         const connect = await connectDB()
 
         if (!connect) {
-            throw new Error(" fail to connect db");
+            throw new Error("fail to connect db")
 
         }
 
@@ -75,13 +72,16 @@ async function server() {
                 return console.log(err.message)
             }
 
-            console.log(`server runing on port${port}`)
+            console.log(`server runing on port ${port}`)
         })
 
+
     } catch (error) {
-        console.log(Error.message)
+        console.log(error.message)
         process.exit(1)
+
     }
+
 }
 
 server()
