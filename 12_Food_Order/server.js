@@ -66,7 +66,7 @@ async function server() {
         })
 
     } catch (error) {
-        throw new error(error.message)
+       console.log(error.message)
         process.exit(1)
 
     }

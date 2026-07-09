@@ -47,6 +47,28 @@ userSchema.pre("save",async function () {
 })
 
 
+userSchema.statics.findByCredentials = async function (Email,Password) {
+    try {
+        
+        const user = await this.findOne({Email})
+        
+        if(!user){
+            throw new Error("unable to login")
+        }
+
+        const isMatched = await bcrypt.compare(Password,user.Password)
+        if(!isMatched){
+            throw new Error("unable to login")
+        }
+        return user
+
+    } catch (error) {
+        console.log(error)
+        throw new Error(Error.message)
+    }
+    
+}
+
 const user = mongoose.model("model",userSchema)
 
 export default user
