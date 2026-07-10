@@ -1,3 +1,4 @@
+import auth from "../middleware/auth.js";
 import HttpError from "../middleware/HttpError.js";
 import user from "../model/user.model.js";
 
@@ -57,11 +58,13 @@ const login = async (req, res, next) => {
 
         const users = await user.findByCredentials(Email, Password)
 
+        const token = await users.genrateAuthToken()
+
         if (!users) {
             next(new HttpError("unable to login"))
         }
 
-        res.status(200).json({ success: true, users })
+        res.status(200).json({ success: true, users, token })
 
     } catch (error) {
         next(new HttpError(error.message))
@@ -71,5 +74,42 @@ const login = async (req, res, next) => {
 
 }
 
+const authtoken = async (req, res, next) => {
+    try {
+
+        const user = req.user;
+        const token = req.token
+
+
+        if (!user) {
+            return next(new HttpError("unable to login", 401))
+        }
+        res.status(200).json({ success: true, user })
+
+    } catch (error) {
+        next(new HttpError(error.message, 500))
+    }
+}
+
+
+
+const authlogin = async (req, res, next) => {
+    try {
+
+        const user = req.user;
+        const token = req.token
+
+
+        if (!user) {
+            return next(new HttpError("unable to login"))
+        }
+
+        res.status(200).json({ success: true, user, token })
+
+    } catch (error) {
+        next(new HttpError(error.message, 500))
+
+    }
+}
 // export controller
-export default { add, getall, login }
+export default { add, getall, login, authlogin }

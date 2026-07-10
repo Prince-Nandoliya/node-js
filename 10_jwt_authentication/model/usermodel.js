@@ -81,16 +81,16 @@ userSchema.methods.genrateAuthToken = async function () {
             process.env.JWT_SECRET,
             { expiresIn: "6d" }
         )
-        console.log("token=", token)
+        console.log("token=", token)  
 
         if (!token) {
             throw new Error("fail to genrate token")
         }
 
         user.tokens = user.tokens.concat({ token })
-
+ 
         await user.save()
-
+   
         return token
 
 
