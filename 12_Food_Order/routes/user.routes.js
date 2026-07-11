@@ -13,4 +13,6 @@ router.get("/all", userController.getall)
 
 router.post("/login", userController.login)
 router.post("/authlogin", auth, userController.authlogin)
+
+router.delete("/delete",auth,userController.deleteUser)
 export default router

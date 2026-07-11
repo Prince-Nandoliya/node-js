@@ -111,5 +111,25 @@ const authlogin = async (req, res, next) => {
 
     }
 }
+
+
+//delete user
+
+const deleteUser = async (req,res,next)=>{
+    try {
+
+        const user = req.user
+
+        await user.deleteOne()
+
+        res.status(200).json({success:true,message:"usr delete successfully"})
+        
+    } catch (error) {
+        next(new HttpError(error.message))
+    }
+    
+}
+
+
 // export controller
-export default { add, getall, login, authlogin }
+export default { add, getall, login, authlogin,deleteUser }
