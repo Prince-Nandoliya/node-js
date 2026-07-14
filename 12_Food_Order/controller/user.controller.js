@@ -112,6 +112,41 @@ const authlogin = async (req, res, next) => {
     }
 }
 
+//logout user
+
+const logout = async(req,res,next)=>{
+    try {
+        
+        const user = req.user
+
+
+        user.tokens = user.tokens.filter((t)=> t.token != req.token)
+        await user.save()
+
+        res.status(200).json({success:true,message:"user logout successfully"})
+
+    } catch (error) {
+      next(new HttpError(error.message))  
+    }
+}
+
+
+//logout all 
+
+
+const logoutall = async(req,res,next)=>{
+    try {
+        req.user.tokens = []
+
+        await req.user.save()
+
+
+        res.status(200).json({success:true,message:"user logout from all device successfully"})
+    } catch (error) {
+        next(new HttpError(error.message))
+    }
+}
+
 
 //delete user
 
@@ -132,4 +167,4 @@ const deleteUser = async (req,res,next)=>{
 
 
 // export controller
-export default { add, getall, login, authlogin,deleteUser }
+export default { add, getall, login, authlogin,logout,logoutall,deleteUser }
