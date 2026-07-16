@@ -1,0 +1,22 @@
+import HttpError from "./HttpError.js";
+
+
+const checkRole = (...roles)=>
+    async(req,res,next)=>{
+        try {
+            
+            if(!req.user){
+                return next(new HttpError("please authenticate",401))
+            }
+
+            if(!roles.includes(req.user.Role)){
+                return next(new HttpError("forbidden:access denied",403))
+            }
+
+            next()
+
+        } catch (error) {
+            next(new HttpError(error.message))
+        }
+    }
+export default checkRole

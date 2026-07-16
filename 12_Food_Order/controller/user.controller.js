@@ -91,7 +91,7 @@ const authtoken = async (req, res, next) => {
     }
 }
 
-
+// auth login
 
 const authlogin = async (req, res, next) => {
     try {
@@ -165,6 +165,39 @@ const deleteUser = async (req,res,next)=>{
     
 }
 
+//update user
+
+
+const updateuser = async(req,res,next)=>{
+    try {    
+
+        const user = req.user
+
+        const updates = Object.keys(req.body)
+
+        const allowedFiled = ["Name","password","Address","MoNumber"]
+
+        const isValidUpdate = updates.every((filed)=>{
+            return allowedFiled.includes(filed)
+        })
+
+        if(!isValidUpdate){
+            return next(new HttpError("only allow filed can be update",404))
+        }
+
+        updates.forEach((update)=>{
+            user[update] = req.body[update]
+        })
+
+        await user.save()
+
+        res.status(200).json({success:true,message:"user update successfully",user})
+
+    } catch (error) {
+        next(new HttpError(error.message))
+    }
+}
+
 
 // export controller
-export default { add, getall, login, authlogin,logout,logoutall,deleteUser }
+export default { add, getall, login, authlogin,logout,logoutall,deleteUser,updateuser }
