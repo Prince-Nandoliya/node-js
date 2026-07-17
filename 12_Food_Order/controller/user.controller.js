@@ -18,7 +18,9 @@ const add = async (req, res, next) => {
             Password,
             Role,
             Address,
-            MoNumber
+            MoNumber,
+            profilepic:req.file?.path,
+            cloudinary_id:req.file.filename
         })
 
         await newuser.save()

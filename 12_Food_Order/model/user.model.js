@@ -31,6 +31,12 @@ const userSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    profilepic:{
+        type:String
+    },
+    cloudinary_id:{
+        type:String
+    },
     tokens: [{
         token: {
             type: String,
