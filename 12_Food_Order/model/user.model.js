@@ -113,6 +113,28 @@ userSchema.methods.genrateAuthToken = async function () {
 
 }
 
+
+
+userSchema.methods.toJSON = function(){
+    const user = this
+
+
+    const userObject = user.toObject()
+
+
+    delete userObject.Password;
+
+    delete userObject.tokens;
+
+    delete userObject.__v
+
+    delete userObject.createdAt
+
+    delete userObject.updatedAt
+
+
+    return userObject
+}
 const user = mongoose.model("model", userSchema)
 
 export default user
