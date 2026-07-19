@@ -3,8 +3,9 @@ import express from "express"
 import auth from "../middleware/auth.js";
 import uploads from "../middleware/uploads.js";
 import validate from "../middleware/validate.js";
-import registerSchema from "../validation/userSchema.js";
+import {registerSchema} from "../validation/userSchema.js";
 import checkRole from "../middleware/CheckRole.js";
+import { updateUserSchema } from "../validation/userSchema.js";
 
 
 const router = express.Router()
@@ -19,5 +20,5 @@ router.get("/logout",auth,userController.logout)
 router.get("/logoutall",auth,userController.logoutall)
 
 router.delete("/delete",auth,userController.deleteUser)
-router.patch("/update",auth,userController.updateuser)
+router.patch("/update",auth,uploads.single("profilepic"),validate(updateUserSchema),userController.updateuser)
 export default router

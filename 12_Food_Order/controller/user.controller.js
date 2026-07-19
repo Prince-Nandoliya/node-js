@@ -1,6 +1,7 @@
 import auth from "../middleware/auth.js";
 import HttpError from "../middleware/HttpError.js";
 import user from "../model/user.model.js";
+import cloudinary from "../config/cloudinary.js"
 
 
 
@@ -157,6 +158,8 @@ const deleteUser = async (req,res,next)=>{
 
         const user = req.user
 
+        await cloudinary.uploder.destroy(user.cloudinary_id)
+
         await user.deleteOne()
 
         res.status(200).json({success:true,message:"usr delete successfully"})
@@ -186,6 +189,16 @@ const updateuser = async(req,res,next)=>{
         if(!isValidUpdate){
             return next(new HttpError("only allow filed can be update",404))
         }
+
+        if(req.file){
+            if(user.cloudinary_id){
+                await cloudinary.uploader.destroy(user.cloudinary_id)
+            }
+        }
+
+        user.profilepic = req.file.path
+
+        user.cloudinary_id = req.file.path
 
         updates.forEach((update)=>{
             user[update] = req.body[update]
