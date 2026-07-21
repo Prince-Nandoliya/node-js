@@ -1,6 +1,6 @@
 import auth from "../middleware/auth.js";
 import HttpError from "../middleware/HttpError.js";
-import user from "../model/user.model.js";
+import User from "../model/user.model.js";
 import cloudinary from "../config/cloudinary.js"
 
 
@@ -13,15 +13,15 @@ const add = async (req, res, next) => {
 
         const { Name, Email, Password, Role, Address, MoNumber } = req.body
 
-        const newuser = new user({
+        const newuser = new User({
             Name,
             Email,
             Password,
             Role,
             Address,
             MoNumber,
-            profilepic:req.file?.path,
-            cloudinary_id:req.file.filename
+            profilepic: req.file?.path,
+            cloudinary_id: req.file.filename
         })
 
         await newuser.save()
@@ -38,13 +38,13 @@ const add = async (req, res, next) => {
 const getall = async (req, res, next) => {
     try {
 
-        const users = await user.find({})
+        const user = await User.find({})
 
-        if (users.length <= 0) {
+        if (user.length <= 0) {
             return res.status(404).json({ success: false, message: "no user found" })
         }
 
-        res.status(200).json({ success: true, message: "all user found successfully", users })
+        res.status(200).json({ success: true, message: "all user found successfully", user })
     } catch (error) {
         next(new HttpError(error.message))
 
@@ -59,15 +59,15 @@ const login = async (req, res, next) => {
     try {
         const { Email, Password } = req.body
 
-        const users = await user.findByCredentials(Email, Password)
+        const user = await User.findByCredentials(Email, Password)
 
-        const token = await users.genrateAuthToken()
+        const token = await user.genrateAuthToken()
 
-        if (!users) {
+        if (!user) {
             next(new HttpError("unable to login"))
         }
 
-        res.status(200).json({ success: true, users, token })
+        res.status(200).json({ success: true, user, token })
 
     } catch (error) {
         next(new HttpError(error.message))
@@ -117,19 +117,19 @@ const authlogin = async (req, res, next) => {
 
 //logout user
 
-const logout = async(req,res,next)=>{
+const logout = async (req, res, next) => {
     try {
-        
+
         const user = req.user
 
 
-        user.tokens = user.tokens.filter((t)=> t.token != req.token)
+        user.tokens = user.tokens.filter((t) => t.token != req.token)
         await user.save()
 
-        res.status(200).json({success:true,message:"user logout successfully"})
+        res.status(200).json({ success: true, message: "user logout successfully" })
 
     } catch (error) {
-      next(new HttpError(error.message))  
+        next(new HttpError(error.message))
     }
 }
 
@@ -137,14 +137,14 @@ const logout = async(req,res,next)=>{
 //logout all 
 
 
-const logoutall = async(req,res,next)=>{
+const logoutall = async (req, res, next) => {
     try {
         req.user.tokens = []
 
         await req.user.save()
 
 
-        res.status(200).json({success:true,message:"user logout from all device successfully"})
+        res.status(200).json({ success: true, message: "user logout from all device successfully" })
     } catch (error) {
         next(new HttpError(error.message))
     }
@@ -153,60 +153,72 @@ const logoutall = async(req,res,next)=>{
 
 //delete user
 
-const deleteUser = async (req,res,next)=>{
+const deleteUser = async (req, res, next) => {
     try {
 
-        const user = req.user
+        let targetuser = req.params.id || req.user._id
 
-        await cloudinary.uploder.destroy(user.cloudinary_id)
+        const user = await User.findById(targetuser)
+
+        if(user.cloudinary_id){
+            await cloudinary.uploader.destroy(user.cloudinary_id);
+        }
 
         await user.deleteOne()
 
-        res.status(200).json({success:true,message:"usr delete successfully"})
-        
+        res.status(200).json({ success: true, message: "usr delete successfully" })
+
     } catch (error) {
         next(new HttpError(error.message))
     }
-    
+
 }
 
 //update user
 
 
-const updateuser = async(req,res,next)=>{
-    try {    
+const updateuser = async (req, res, next) => {
+    try {
 
-        const user = req.user
+        let targetuser = req.params.id || req.user._id
+        console.log("ID:", req.params.id)
+        console.log("Target User:", targetuser)
 
+        const user = await User.findById(targetuser)
+
+        if (!user) {
+            return next(new HttpError("user are not found", 404))
+        }
         const updates = Object.keys(req.body)
 
-        const allowedFiled = ["Name","password","Address","MoNumber"]
+        const allowedFiled = ["Name", "password", "Address", "MoNumber"]
 
-        const isValidUpdate = updates.every((filed)=>{
+        const isValidUpdate = updates.every((filed) => {
             return allowedFiled.includes(filed)
         })
 
-        if(!isValidUpdate){
-            return next(new HttpError("only allow filed can be update",404))
+        if (!isValidUpdate) {
+            return next(new HttpError("only allow filed can be update", 404))
         }
 
-        if(req.file){
-            if(user.cloudinary_id){
+        if (req.file) {
+            if (user.cloudinary_id) {
                 await cloudinary.uploader.destroy(user.cloudinary_id)
             }
+            user.profilepic = req.file.path
+
+            user.cloudinary_id = req.file.filename
         }
 
-        user.profilepic = req.file.path
 
-        user.cloudinary_id = req.file.path
 
-        updates.forEach((update)=>{
+        updates.forEach((update) => {
             user[update] = req.body[update]
         })
 
         await user.save()
 
-        res.status(200).json({success:true,message:"user update successfully",user})
+        res.status(200).json({ success: true, message: "user update successfully", user})
 
     } catch (error) {
         next(new HttpError(error.message))
@@ -215,4 +227,4 @@ const updateuser = async(req,res,next)=>{
 
 
 // export controller
-export default { add, getall, login, authlogin,logout,logoutall,deleteUser,updateuser }
+export default { add, getall, login, authlogin, logout, logoutall, deleteUser, updateuser }

@@ -11,7 +11,7 @@ const userSchema = new mongoose.Schema({
     Email: {
         type: String,
         required: true,
-        unqiue: true
+        unique: true
     },
     Password: {
         type: String,
@@ -122,7 +122,7 @@ userSchema.methods.toJSON = function(){
     const userObject = user.toObject()
 
 
-    delete userObject.Password;    
+    delete userObject.Password;   
 
     delete userObject.__v
 
@@ -133,6 +133,6 @@ userSchema.methods.toJSON = function(){
 
     return userObject
 }
-const user = mongoose.model("model", userSchema)
+const User = mongoose.model("model", userSchema)
 
-export default user
+export default User

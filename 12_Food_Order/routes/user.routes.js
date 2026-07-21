@@ -11,7 +11,7 @@ import { updateUserSchema } from "../validation/userSchema.js";
 const router = express.Router()
 
 router.post("/add", validate(registerSchema),uploads.single("profilepic"), userController.add)
-router.get("/all",auth,checkRole("customer"),userController.getall)
+router.get("/all",auth,checkRole("admin"),userController.getall)
 
 router.post("/login", userController.login)
 router.post("/authlogin", auth, userController.authlogin)
@@ -21,4 +21,6 @@ router.get("/logoutall",auth,userController.logoutall)
 
 router.delete("/delete",auth,userController.deleteUser)
 router.patch("/update",auth,uploads.single("profilepic"),validate(updateUserSchema),userController.updateuser)
+
+
 export default router
