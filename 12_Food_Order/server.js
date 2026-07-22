@@ -9,6 +9,7 @@ import HttpError from "./middleware/HttpError.js"
 import router from "./routes/user.routes.js"
 import connectDB from "./config/db.js"
 import adminrouter from "./routes/admin.routes.js"
+import restaurantRouter from "./routes/restaurant.routes.js"
 
 // dotenv config
 dotenv.config({ path: "./.env" })
@@ -25,6 +26,7 @@ app.get("/", (req, res) => {
 
 app.use("/user", router)
 app.use("/admin",adminrouter)
+app.use("/restaurant",restaurantRouter)
 
 // if route not found
 app.use((req, res, next) => {
