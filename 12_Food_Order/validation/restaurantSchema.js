@@ -37,6 +37,7 @@ const restaurantSchema = joi.object({
         "string.empty": "Address is required",
         "any.required": "Address is required"
     }),    
+    
     openTime:joi.string().required().messages({
         "string.base":"openTime must be string",
         "string.empty":"opneTime is required",

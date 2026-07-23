@@ -10,6 +10,7 @@ import router from "./routes/user.routes.js"
 import connectDB from "./config/db.js"
 import adminrouter from "./routes/admin.routes.js"
 import restaurantRouter from "./routes/restaurant.routes.js"
+import restaurant from "./model/restaurants.model.js"
 
 // dotenv config
 dotenv.config({ path: "./.env" })
@@ -80,3 +81,12 @@ async function server() {
 // call server function
 server()
 
+
+
+async function check(){
+    const restaurantData = await restaurant.findById("6a607c151b46a49440c5d350")
+    .populate("owner","Name Email MoNumber")
+    console.log(restaurantData)
+}
+
+check()
