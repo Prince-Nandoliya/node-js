@@ -1,5 +1,6 @@
 import User from "../model/user.model.js";
 import HttpError from "../middleware/HttpError.js"
+import auth from "../middleware/auth.js";
 
 
 const add = async (req, res, next) => {
@@ -10,7 +11,9 @@ const add = async (req, res, next) => {
         const newUser = new User({
             Name,
             Email,
-            Password
+            Password,
+            Profile_pic: req.file?.path,
+            cloudinary_id: req.file.filename
         })
 
         await newUser.save()
@@ -39,4 +42,61 @@ const getall = async (req,res,next)=>{
     }
 }
 
-export default {add,getall}
+
+const login = async(req,res,next)=>{
+    try {
+        
+        const {Email,Password} = req.body
+
+        const user = await User.findByCredentials(Email,Password)
+
+        const token = await user.genrateAuthToken()
+
+        if(!user){
+            next(new HttpError("unable to login"))
+        }
+
+        res.status(200).json({success:true,user})
+
+
+    } catch (error) {
+        next(new HttpError(error.message))
+    }
+}
+
+
+const authtoken = async(req,res,next)=>{
+    try {
+        
+        const user = req.body
+
+        if(!user){
+            return next(new HttpError("unable to login",401))
+        }
+
+        res.status(200).json({success:true,user})
+
+    } catch (error) {
+        next(new HttpError(error.message,500))
+    }
+}
+
+
+const authlogin = async (req,res,next)=>{
+    try {
+        
+        const user = req.user
+
+        if(!user){
+            return next(new HttpError("unable to login"))
+        }
+
+        res.status(200).json({success:true,user})
+
+    } catch (error) {
+        next(new HttpError(error.message,500))
+    }
+}
+
+
+export default {add,getall,login,authlogin}
