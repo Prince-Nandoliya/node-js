@@ -98,5 +98,51 @@ const authlogin = async (req,res,next)=>{
     }
 }
 
+const logout = async (req,res,next)=>{
+    try {
+        
+        const user = req.user
 
-export default {add,getall,login,authlogin}
+
+        user.tokens = user.tokens.filter((t) => t.token != req.token)
+        await user.save()
+
+        res.status(200).json({success:true,message: "user logout successfully"})
+
+    } catch (error) {
+        next(new HttpError(error.message))
+    }
+}
+
+
+const logoutall = async (req,res,next) => {
+    try {
+        
+        req.user.tokens = []
+
+        await req.user.save()
+
+        res.status(200).json({success:true,message:"logout from all device successfully"})
+
+    } catch (error) {
+        next(new HttpError(error.message))
+    }
+}
+
+
+const deleteUser = async(req,res,next)=>{
+    try {
+        
+        const user = req.user
+
+        await user.deleteOne()
+
+        res.status(200).json({success:true,message:"user delete successfully"})
+
+    } catch (error) {
+        next(new HttpError(error.message))
+    }
+}
+
+
+export default {add,getall,login,authlogin,logout,logoutall,deleteUser}
