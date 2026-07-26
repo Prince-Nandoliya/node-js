@@ -19,6 +19,14 @@ app.use("/user",router)
 app.use((req, res, next) => {
     next(new HttpError("requested routes are not found"))
 })
+app.use((Error, req, res, next) => {
+    if (res.headersSent) {
+        return next(Error)
+    }
+
+    res.status(Error.StatusCode || 500).
+        json({ message: Error.message || "internal server error" })
+})
 
 const port = 5000
 

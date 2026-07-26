@@ -2,11 +2,13 @@ import userController from "../controller/user.controller.js";
 import express from "express"
 import auth from "../middleware/auth.js";
 import uploads from "../middleware/uploads.js";
+import registerSchema from "../validation/validation.js";
+import validate from "../middleware/validate.js"
 
 
 const router = express.Router()
 
-router.post("/add",uploads.single("profile_pic"),userController.add)
+router.post("/add",uploads.single("profile_pic"),validate(registerSchema),userController.add)
 
 router.get("/all",userController.getall)
 
