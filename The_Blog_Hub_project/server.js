@@ -2,7 +2,8 @@ import express from "express"
 import HttpError from "./middleware/HttpError.js"
 import connectDB from "./config/db.js"
 import dotenv from "dotenv"
-import router from "./routes/user.router.js"
+import router from "./routes/user.routes.js"
+import Blogrouter from "./routes/Blog.routes.js"
 
 const app = express()
 
@@ -15,6 +16,7 @@ dotenv.config({path : "./.env"})
 app.use(express.json())
 
 app.use("/user",router)
+app.use("/blog",Blogrouter)
 
 app.use((req, res, next) => {
     next(new HttpError("requested routes are not found"))

@@ -6,12 +6,13 @@ import auth from "../middleware/auth.js";
 const add = async (req, res, next) => {
     try {
 
-        const { Name, Email, Password } = req.body
+        const { Name, Email, Password,Role   } = req.body
 
         const newUser = new User({
             Name,
             Email,
             Password,
+            Role,
             Profile_pic: req.file?.path,
             cloudinary_id: req.file.filename
         })

@@ -14,7 +14,8 @@ const registerSchema = Joi.object({
     Password: Joi.string().min(6).max(20).required().messages({
         "string.base":"Password must be in string",
         "any.required":"Password is required"
-    })
+    }),
+    Role: Joi.string().valid("user","admin").default("user")
     
 })
 

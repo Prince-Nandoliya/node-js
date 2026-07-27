@@ -3,6 +3,7 @@ import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
 
 
+
 const userSchema = new mongoose.Schema({
     Name:{
         type:String,
@@ -16,6 +17,11 @@ const userSchema = new mongoose.Schema({
     Password:{
         type:String,
         required:true
+    },
+    Role:{
+        type:String,
+        enum:["user","admin"],
+        default:"user"
     },
     Profile_pic:{
         type:String
