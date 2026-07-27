@@ -86,7 +86,7 @@ server()
 async function check(){
     const restaurantData = await restaurant.findById("6a607c151b46a49440c5d350")
     .populate("owner","Name Email MoNumber")
-    console.log(restaurantData)
+    // console.log(restaurantData)
 }
 
 check()
