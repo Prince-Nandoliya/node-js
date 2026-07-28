@@ -31,11 +31,11 @@ const userSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    profilepic:{
-        type:String
+    profilepic: {
+        type: String
     },
-    cloudinary_id:{
-        type:String
+    cloudinary_id: {
+        type: String
     },
     tokens: [{
         token: {
@@ -45,7 +45,17 @@ const userSchema = new mongoose.Schema({
     }],
 
 
-}, { timestamps: true })
+    }, {
+        timestamps: true,
+        toJSON: { virtuals: true },
+        toObject: { virtuals: true },
+    })
+
+    userSchema.virtual("restaurant", {
+        ref: "restaurant",          // Model name
+        localField: "_id",
+        foreignField: "owner"
+    });
 
 
 
@@ -90,16 +100,16 @@ userSchema.methods.genrateAuthToken = async function () {
         const user = this
 
         const token = jwt.sign(
-            {_id:user._id.toString()},
+            { _id: user._id.toString() },
             process.env.JWT_SECRET,
-            {expiresIn: "7d"}
+            { expiresIn: "7d" }
         )
 
-        if(!token){
+        if (!token) {
             throw new Error("fail to genrate token")
         }
 
-        user.tokens = user.tokens.concat({token})
+        user.tokens = user.tokens.concat({ token })
 
 
         await user.save()
@@ -115,14 +125,14 @@ userSchema.methods.genrateAuthToken = async function () {
 
 
 
-userSchema.methods.toJSON = function(){
+userSchema.methods.toJSON = function () {
     const user = this
 
 
     const userObject = user.toObject()
 
 
-    delete userObject.Password;   
+    delete userObject.Password;
 
     delete userObject.__v
 

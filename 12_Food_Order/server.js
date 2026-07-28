@@ -11,6 +11,7 @@ import connectDB from "./config/db.js"
 import adminrouter from "./routes/admin.routes.js"
 import restaurantRouter from "./routes/restaurant.routes.js"
 import restaurant from "./model/restaurants.model.js"
+import User from "./model/user.model.js"
 
 // dotenv config
 dotenv.config({ path: "./.env" })
@@ -83,10 +84,26 @@ server()
 
 
 
-async function check(){
-    const restaurantData = await restaurant.findById("6a607c151b46a49440c5d350")
-    .populate("owner","Name Email MoNumber")
-    // console.log(restaurantData)
+// async function check(){
+//     const restaurantData = await restaurant.findById("6a607c151b46a49440c5d350")
+//     .populate("owner","Name Email MoNumber")
+//     console.log(restaurantData)
+// }
+
+// check()
+
+
+async function virtualUser(){
+    try {
+        
+        const user = await User
+        .findById("6a5eff3fed68e287c79c336d").populate("restaurant")
+        console.log(user)
+
+    } catch (error) {
+        next(new HttpError(error.message))
+    }
+    
 }
 
-check()
+virtualUser()
