@@ -38,12 +38,13 @@ const Delete = async (req, res, next) => {
         const targetuser = req.params.id;
 
         const restaurantData = await restaurant.findById(targetuser)
+        
 
-        if (req.file) {
-            if (user.cloudinary_id) {
-                await cloudinary.uploader.destroy(user.cloudinary_id)
-            }
+
+        if (restaurantData.cloudinary_id) {
+            await cloudinary.uploader.destroy(restaurantData.cloudinary_id)
         }
+
 
         await restaurant.deleteOne();
 
@@ -87,16 +88,16 @@ const update = async (req, res, next) => {
             "closeingTime"
         ]
 
-        const isValidUpdate =   updates.every((field)=>
+        const isValidUpdate = updates.every((field) =>
             allowField.includes(field)
         )
 
-        if(!isValidUpdate){
-            return next(new HttpError("only allowField can be updated",400))
+        if (!isValidUpdate) {
+            return next(new HttpError("only allowField can be updated", 400))
         }
 
-        if(req.file){
-            if(restaurantData.cloudinary_id){
+        if (req.file) {
+            if (restaurantData.cloudinary_id) {
                 await cloudinary.uploader.destroy(restaurantData.cloudinary_id)
             }
 
@@ -104,17 +105,17 @@ const update = async (req, res, next) => {
             restaurantData.cloudinary_id = req.file.filename
         }
 
-        updates.forEach((field)=>{
+        updates.forEach((field) => {
             restaurantData[field] = req.body[field]
         })
 
         await restaurantData.save()
 
-        res.status(200).json({success:true,message:"restaurant update successfully",restaurantData})
+        res.status(200).json({ success: true, message: "restaurant update successfully", restaurantData })
 
     } catch (error) {
         next(new HttpError(error.message))
     }
 }
 
-export default { add, Delete, getall,update }
+export default { add, Delete, getall, update }
