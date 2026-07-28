@@ -9,7 +9,7 @@ const BlogSchema = new mongoose.Schema({
     },
     Category: {
         type: String,
-        enum:["Business","Travel","Lifestyle"],
+        enum:["Business","Travel","Travel"],
         required:true
     },
     content: {
