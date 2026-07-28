@@ -12,7 +12,7 @@ const storage = new CloudinaryStorage({
         transformation:[
             {
                 height:"800",
-                weight:"800",
+                width:"800",
                 crop:"limit"
             },{
                 fetch_format:"webp"
