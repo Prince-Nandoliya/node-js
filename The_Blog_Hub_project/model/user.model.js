@@ -5,62 +5,71 @@ import jwt from "jsonwebtoken"
 
 
 const userSchema = new mongoose.Schema({
-    Name:{
-        type:String,
-        required:true
+    Name: {
+        type: String,
+        required: true
     },
-    Email:{
-        type:String,
-        required:true,
-        unique:true
+    Email: {
+        type: String,
+        required: true,
+        unique: true
     },
-    Password:{
-        type:String,
-        required:true
+    Password: {
+        type: String,
+        required: true
     },
-    Role:{
-        type:String,
-        enum:["user","admin"],
-        default:"user"
+    Role: {
+        type: String,
+        enum: ["user", "admin"],
+        default: "user"
     },
-    Profile_pic:{
-        type:String
+    Address: {
+        type: String,
+        required: true,
     },
-    cloudinary_id:{
-        type:String
+    Phone: {
+        type: Number,
+        required: true,
     },
-    tokens:[
+
+    Profile_pic: {
+        type: String
+    },
+    cloudinary_id: {
+        type: String
+    },
+    tokens: [
         {
-            token:{
-                type:String,
-                required:true
+            token: {
+                type: String,
+                required: true
             }
         }
     ]
 
-},{timestamps:true})
+}, { timestamps: true })
 
-userSchema.pre("save",async function() {
+userSchema.pre("save", async function () {
     const user = this
 
-    if(user.isModified("Password")){
-        user.Password = await bcrypt.hash(user.Password,10)
+    if (user.isModified("Password")) {
+        user.Password = await bcrypt.hash(user.Password, 10)
     }
 })
 
 
-userSchema.statics.findByCredentials = async function (Email,Password) {
+userSchema.statics.findByCredentials = async function (Email, Password) {
     try {
-        
-        const User = await this.findOne({Email})
 
-        if(!User){
+        const User = await this.findOne({ Email })
+
+        if (!User) {
             throw new Error("unable to login")
         }
 
-        const isMatched = await bcrypt.compare(Password,User.Password)
+        const isMatched = await bcrypt.compare(Password, User.Password)
 
-        if(!isMatched){
+        if (!isMatched) {
             throw new Error("unable to login")
         }
 
@@ -69,25 +78,25 @@ userSchema.statics.findByCredentials = async function (Email,Password) {
     } catch (error) {
         throw new Error(error.message)
     }
-    
+
 }
 
-userSchema.methods.genrateAuthToken = async function(){
+userSchema.methods.genrateAuthToken = async function () {
     try {
-        
+
         const User = this
 
         const token = jwt.sign(
-            {_id: User._id.toString()},
+            { _id: User._id.toString() },
             process.env.JWT_SECRET,
-            {expiresIn:"7d"}
+            { expiresIn: "7d" }
         )
 
-        if(!token){
+        if (!token) {
             throw new Error("fail to genrate token")
         }
 
-        User.tokens = User.tokens.concat({ token})
+        User.tokens = User.tokens.concat({ token })
 
         await User.save()
 
@@ -96,9 +105,9 @@ userSchema.methods.genrateAuthToken = async function(){
     } catch (error) {
         throw new Error(error.message)
     }
-    
+
 }
 
-const User = mongoose.model("user",userSchema)
+const User = mongoose.model("user", userSchema)
 
- export default User
+export default User

@@ -6,13 +6,15 @@ import auth from "../middleware/auth.js";
 const add = async (req, res, next) => {
     try {
 
-        const { Name, Email, Password,Role   } = req.body
+        const { Name, Email, Password,Role,Address,Phone } = req.body
 
         const newUser = new User({
             Name,
             Email,
             Password,
             Role,
+            Address,
+            Phone,
             Profile_pic: req.file?.path,
             cloudinary_id: req.file.filename
         })
@@ -153,7 +155,7 @@ const updateUser = async (req, res, next) => {
 
     const updates = Object.keys(req.body);
 
-    let allowedFiled = ["Name", "Email", "Password"];
+    let allowedFiled = ["Name", "Address", "Phone"];
 
     if (req.user.Role === "admin") {
       allowedFiled = [...allowedFiled, "isVerified"];
