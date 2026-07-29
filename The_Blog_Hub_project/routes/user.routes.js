@@ -1,8 +1,8 @@
 import userController from "../controller/user.controller.js";
 import express from "express"
 import auth from "../middleware/auth.js";
+import registerSchema from "../validation/user.validation.js"
 import uploads from "../middleware/uploads.js";
-import registerSchema from "../validation/validation.js";
 import validate from "../middleware/validate.js"
 
 
@@ -21,5 +21,7 @@ router.get("/logout",auth,userController.logout)
 router.get("/logoutall",auth,userController.logoutall)
 
 router.delete("/delete",auth,userController.deleteUser)
+
+router.patch("/update",auth,uploads.single("Profile_pic"),userController.updateUser)
 
 export default router

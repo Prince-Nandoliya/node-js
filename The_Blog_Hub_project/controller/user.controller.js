@@ -145,5 +145,52 @@ const deleteUser = async(req,res,next)=>{
     }
 }
 
+const updateUser = async (req, res, next) => {
+  try {
+    const targetedUser = req.params.id || req.user._id;
 
-export default {add,getall,login,authlogin,logout,logoutall,deleteUser}
+    const user = await User.findById(targetedUser);
+
+    const updates = Object.keys(req.body);
+
+    let allowedFiled = ["Name", "Email", "Password"];
+
+    if (req.user.Role === "admin") {
+      allowedFiled = [...allowedFiled, "isVerified"];
+    }
+
+    const isValidUpdate = updates.every((filed) => {
+      return allowedFiled.includes(filed);
+    });
+
+    if (!isValidUpdate) {
+      return next(new HttpError("only allowed filed can update", 404));
+    }
+
+    if (req.file) {
+      if (user.Cloudinary_Id) {
+        await cloudinary.uploader.destroy(user.Cloudinary_Id);
+      }
+
+      user.Profile_Pic = req.file.path;
+
+      user.Cloudinary_Id = req.file.filename;
+    }
+
+    updates.forEach((update) => {
+      user[update] = req.body[update];
+    });
+
+    await user.save();
+
+    res.status(200).json({
+      message: "user data updated successfully",
+      user,
+    });
+  } catch (error) {
+    next(new HttpError(error.message));
+  }
+};
+
+
+export default {add,getall,login,authlogin,logout,logoutall,deleteUser,updateUser}

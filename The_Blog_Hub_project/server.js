@@ -4,6 +4,7 @@ import connectDB from "./config/db.js"
 import dotenv from "dotenv"
 import router from "./routes/user.routes.js"
 import Blogrouter from "./routes/Blog.routes.js"
+import adminrouter from "./routes/admin.routes.js"
 
 const app = express()
 
@@ -17,6 +18,7 @@ app.use(express.json())
 
 app.use("/user",router)
 app.use("/blog",Blogrouter)
+app.use("/admin",adminrouter)
 
 app.use((req, res, next) => {
     next(new HttpError("requested routes are not found"))
