@@ -35,7 +35,7 @@ export const registerSchema = Joi.object({
 })
 
 export const  updateUserSchema = registerSchema 
-     .fork(["Name","Address","Phone"],(fields) => fields.optional())
+     .fork(["Name","Address","Phone","Password"],(fields) => fields.optional())
      .fork(["Role","Email"],(fields)=> fields.forbidden())
      .or("Name","Address","Phone")
      .messages({        
