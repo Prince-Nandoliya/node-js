@@ -9,8 +9,8 @@ const BlogSchema = new mongoose.Schema({
     },
     Category: {
         type: String,
-        enum:["Business","Travel","Travel"],
-        required:true
+        enum: ["Business", "Travel", "Travel"],
+        required: true
     },
     content: {
         type: String,
@@ -20,17 +20,21 @@ const BlogSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    Blogimg:{
-        type:String,
-        required:true
+    Blogimg: {
+        type: String,
+        required: true
     },
-    cloudinary_id:{
-        type:String
+    Author: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "user",
+    },
+    cloudinary_id: {
+        type: String
     }
 
 
-},{timestamps:true})
+}, { timestamps: true })
 
-const Blog = mongoose.model("Blog",BlogSchema)
+const Blog = mongoose.model("Blog", BlogSchema)
 
 export default Blog

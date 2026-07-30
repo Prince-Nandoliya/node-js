@@ -13,6 +13,7 @@ const add = async (req, res, next) => {
             Category,
             content,
             description,
+             Author: req.user._id,
             Blogimg: req.file?.path,
             cloudinary_id: req.file.filename
         })
@@ -30,8 +31,8 @@ const add = async (req, res, next) => {
 
 const getall = async (req, res, next) => {
     try {
-
-        const BlogData = await Blog.find()
+        const BlogData = await Blog.find().populate("Author", "-_id");
+        
 
         res.status(200).json({ success: true, message: "all blog found successfully", BlogData })
 
@@ -67,7 +68,7 @@ const Delete = async (req, res, next) => {
 
 const update = async (req, res, next) => {
     try {
-        
+
         const BlogData = await Blog.findById(req.params.id)
 
 

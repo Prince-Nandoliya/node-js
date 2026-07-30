@@ -1,6 +1,6 @@
 import Joi from "joi";
 
-const BlogSchema = Joi.object({
+ export const BlogSchema = Joi.object({
 
     BlogTitle: Joi.string().min(3).max(30).trim().required().messages({
         "string.base": "BlogTitle must be in string",
@@ -30,3 +30,12 @@ const BlogSchema = Joi.object({
 
 
 })
+
+
+export const updateBlogSchema = BlogSchema
+       .fork(["BlogTitle","Category","content","description"],(fields) => fields.optional())
+       .or("BlogTitle","Category","content","description")
+       .messages({
+          "object.missing":
+      "BlogTitle,Category,Content or description any one field is required to update",
+       })

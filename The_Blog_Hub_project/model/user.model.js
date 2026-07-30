@@ -47,7 +47,10 @@ const userSchema = new mongoose.Schema({
         }
     ]
 
-}, { timestamps: true })
+}, { timestamps: true,
+      toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+})
 
 userSchema.pre("save", async function () {
     const user = this
@@ -107,6 +110,11 @@ userSchema.methods.genrateAuthToken = async function () {
     }
 
 }
+userSchema.virtual("Blogs", {
+  ref: "Blog",
+  localField: "_id",
+  foreignField: "Author",
+});
 
 const User = mongoose.model("user", userSchema)
 
