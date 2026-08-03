@@ -27,7 +27,6 @@ const restaurantSchema = new mongoose.Schema({
         type:mongoose.Schema.Types.ObjectId,
         ref:"model"
     },
-
     openTime: {
         type: String,
         required: true
@@ -35,6 +34,10 @@ const restaurantSchema = new mongoose.Schema({
     closeingTime: {
         type: String,
         required: true
+    },
+    isOpen:{
+        type:Boolean,
+        default:true
     },
     restaurant_img: {
         type: String,

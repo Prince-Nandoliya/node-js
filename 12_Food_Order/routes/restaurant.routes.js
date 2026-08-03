@@ -14,7 +14,7 @@ router.post("/add", auth, uploads.single("restaurant_img"), validate(restaurantS
 
 router.delete("/delete/:id",auth,checkRole("admin"),restaurantController.Delete)
 
-router.get("/all",auth,checkRole("admin"),restaurantController.getall)
+router.get("/all",auth,restaurantController.getall)
 
 router.patch("/update/:id",auth,checkRole("admin"),restaurantController.update)
 

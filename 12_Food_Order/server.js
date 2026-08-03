@@ -93,17 +93,17 @@ server()
 // check()
 
 
-async function virtualUser(){
-    try {
+// async function virtualUser(){
+//     try {
         
-        const user = await User
-        .findById("6a5eff3fed68e287c79c336d").populate("restaurant")
-        console.log(user)
+//         const user = await User
+//         .findById("6a5eff3fed68e287c79c336d").populate("restaurant")
+//         console.log(user)
 
-    } catch (error) {
-        next(new HttpError(error.message))
-    }
+//     } catch (error) {
+//         next(new HttpError(error.message))
+//     }
     
-}
+// }
 
-virtualUser()
+// virtualUser()

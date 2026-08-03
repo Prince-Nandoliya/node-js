@@ -5,9 +5,7 @@ import cloudinary from "../config/cloudinary.js"
 
 const add = async (req, res, next) => {
     try {
-        // console.log(req.body);
-
-        const { restaurantName, description, state, city, Address, openTime, closeingTime } = req.body
+        const { restaurantName, description, state, city, Address, openTime, closeingTime, isOpen } = req.body
 
         const newrestaurnat = new restaurant({
             restaurantName,
@@ -18,6 +16,7 @@ const add = async (req, res, next) => {
             owner: req.user._id,
             openTime,
             closeingTime,
+            isOpen,
             restaurant_img: req.file?.path,
             cloudinary_id: req.file.filename
         })
@@ -38,7 +37,7 @@ const Delete = async (req, res, next) => {
         const targetuser = req.params.id;
 
         const restaurantData = await restaurant.findById(targetuser)
-        
+
 
 
         if (restaurantData.cloudinary_id) {
@@ -57,13 +56,47 @@ const Delete = async (req, res, next) => {
 const getall = async (req, res, next) => {
     try {
 
-        const restaurantData = await restaurant.find()
+        let { page = 1, limit = 10, isOpen, serch, city, sort = "createdAt", order = "desc" } = req.query
 
-        res.status(200).json({ success: true, message: "all restaurant found successfully", restaurantData })
+        page = Number(page)
 
-    } catch (error) {
-        next(new HttpError(error.message))
-    }
+        limit = Number(limit)
+
+        const filter = {}
+
+        if (serch) {
+            filter.restaurantName = {
+                $regex: serch,
+                $options: "i"
+            }
+        }
+
+        if (isOpen !== undefined) {
+            filter.isOpen = isOpen === "true"
+        }
+        if (city) {
+            filter.city = city
+        }
+
+        const sortOption = () => {
+            [sort] = "asc" ? 1 : -1;
+        }
+
+        const totalrestaurant = await restaurant.countDocuments(filter)
+
+        const restaurants = await restaurant.find(filter).populate("owner", "Name Email -_id").skip((page - 1) * limit).limit(limit).lean()
+
+        if (restaurants.length === 0) {
+            res.status(404).json({ success: false, message: "restaurant not found" })
+        }
+
+        res.status(200).json({ success: true, message: "restaurant founds", totalrestaurant: totalrestaurant, totalPages: Math.ceil(totalrestaurant / limit),
+ page: page, restaurants})
+
+
+} catch (error) {
+    next(new HttpError(error.message))
+}
 }
 
 
