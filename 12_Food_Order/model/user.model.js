@@ -37,6 +37,9 @@ const userSchema = new mongoose.Schema({
     cloudinary_id: {
         type: String
     },
+    isVerified:{
+        type:Boolean
+    },
     tokens: [{
         token: {
             type: String,
