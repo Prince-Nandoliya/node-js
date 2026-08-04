@@ -38,13 +38,62 @@ const add = async (req, res, next) => {
 const getall = async (req, res, next) => {
     try {
 
-        const user = await User.find({})
+        let {
+            page = 1,
+            limit = 10,
+            role,
+            search,
+            sort = "created",
+            order = "desc"
+        } = req.query
 
-        if (user.length <= 0) {
-            return res.status(404).json({ success: false, message: "no user found" })
+        page = Number(page)
+
+        limit = Number(limit)
+
+        const filter = {}
+
+
+        if (search) {
+            filter.$or = [
+                {
+                    Name: {
+                        $regex: search,
+                        $options: "i"
+                    }
+                }, {
+                    Email: {
+                        $regex: search,
+                        $options: "i"
+
+                    }
+                }
+            ]
         }
 
-        res.status(200).json({ success: true, message: "all user found successfully", user })
+        if(role){
+            filter.Role = role
+        }
+
+        const sortOption = {
+            [sort]: order === "asc" ? 1 : -1
+        }
+
+        const totalUsers = await User.countDocuments(filter)
+
+
+        const users = await User.find(filter)
+        .sort(sortOption)
+        .skip((page - 1) * limit)
+        .limit(limit)
+        .lean()
+
+        if(users.length === 0){
+            res.status(404).json({success:false,message:"user not found"})
+        } 
+
+        res.status(200).json({success:true,message:"user found successfully",totalUsers,totalpage:Math.ceil(totalUsers / limit),currentPage:page,users})
+
     } catch (error) {
         next(new HttpError(error.message))
 
@@ -160,7 +209,7 @@ const deleteUser = async (req, res, next) => {
 
         const user = await User.findById(targetuser)
 
-        if(user.cloudinary_id){
+        if (user.cloudinary_id) {
             await cloudinary.uploader.destroy(user.cloudinary_id);
         }
 
@@ -218,7 +267,7 @@ const updateuser = async (req, res, next) => {
 
         await user.save()
 
-        res.status(200).json({ success: true, message: "user update successfully", user})
+        res.status(200).json({ success: true, message: "user update successfully", user })
 
     } catch (error) {
         next(new HttpError(error.message))
