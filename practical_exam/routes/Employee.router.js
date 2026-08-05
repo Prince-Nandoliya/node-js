@@ -17,4 +17,5 @@ router.get("/logoutall",auth,EmployeeController.logoutall)
 router.delete("/delete",auth,EmployeeController.Delete)
 router.patch("/update",auth,EmployeeController.update)
 
+
 export default router

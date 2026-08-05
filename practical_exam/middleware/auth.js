@@ -19,6 +19,7 @@ const auth = async (req, res, next) => {
       _id: decode._id,
       "tokens.token": token,
     });
+    
 
     if (!employees) {
       return next(new HttpError("Authentication failed", 404));

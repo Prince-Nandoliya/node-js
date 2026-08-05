@@ -45,6 +45,9 @@ const employeeScheme = new mongoose.Schema(
     },
     {
         timestamps: true,
+        toJSON: { virtuals: true },
+        toObject: { virtuals: true },
+
 
     },
 );
@@ -100,6 +103,11 @@ employeeScheme.methods.generateAuthToken = async function () {
     }
 };
 
+employeeScheme.virtual("Attendances", {
+  ref: "Attendance",
+  localField: "_id",
+  foreignField: "employeeName",
+});
 
 
 

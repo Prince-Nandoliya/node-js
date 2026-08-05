@@ -169,4 +169,5 @@ const update = async (req, res, next) => {
 
 
 
+
 export default {add,login,getAll,authLogin,logout,logoutall,Delete,update}
