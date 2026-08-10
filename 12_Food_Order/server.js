@@ -6,10 +6,13 @@ import dotenv from "dotenv"
 // local modules
 
 import HttpError from "./middleware/HttpError.js"
-import router from "./routes/user.routes.js"
 import connectDB from "./config/db.js"
+
+import router from "./routes/user.routes.js"
 import adminrouter from "./routes/admin.routes.js"
 import restaurantRouter from "./routes/restaurant.routes.js"
+import providerRouter from "./routes/Provider.routes.js"
+
 import restaurant from "./model/restaurants.model.js"
 import User from "./model/user.model.js"
 
@@ -29,6 +32,7 @@ app.get("/", (req, res) => {
 app.use("/user", router)
 app.use("/admin",adminrouter)
 app.use("/restaurant",restaurantRouter)
+app.use("/provider",providerRouter)
 
 // if route not found
 app.use((req, res, next) => {

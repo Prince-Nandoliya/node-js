@@ -1,4 +1,4 @@
-import mongoose  from "mongoose";
+import mongoose from "mongoose";
 
 const providerSchema = new mongoose.Schema({
 
@@ -17,18 +17,25 @@ const providerSchema = new mongoose.Schema({
         type: String,
         required: true
     }],
-    
-    cloudinary_id:{
-        type:String,
-        required:true
+
+    cloudinary_id: [
+        {
+            type: String,
+            required: true
+        }
+    ],
+    AccountNo: {
+        type: String,
+        required: true
+
     },
-    isVerifield:{
-        type:Boolean
+    isVerifield: {
+        type: Boolean
     },
-},{
-    timestamps:true
+}, {
+    timestamps: true
 })
 
-const providerModel = mongoose.model("provider",providerSchema)
+const providerModel = mongoose.model("provider", providerSchema)
 
 export default providerModel

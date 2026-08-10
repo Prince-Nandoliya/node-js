@@ -3,6 +3,8 @@ import HttpError from "../middleware/HttpError.js";
 import User from "../model/user.model.js";
 import cloudinary from "../config/cloudinary.js"
 
+import { WelComeEmailTemplate } from "../template/EmailTemplate.js";
+import sendEmail from "../utils/sendEmail.js";
 
 
 // add new user
@@ -25,6 +27,12 @@ const add = async (req, res, next) => {
         })
 
         await newuser.save()
+
+        await sendEmail({
+            to:newuser.Email,
+            subject:"Welcome RoyalBite",
+            html:WelComeEmailTemplate(newuser.Name),
+        });
 
         res.status(201).json({ success: true, message: "new user add successfully", newuser })
     } catch (error) {
