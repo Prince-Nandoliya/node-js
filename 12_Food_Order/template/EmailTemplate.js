@@ -1,265 +1,424 @@
-export const WelComeEmailTemplate = (userName) => {
-    return `
-    <!DOCTYPE html>
+export const WelComeEmailTemplate = (Name, type) => {
+
+  let title;
+  let subtitle;
+  let message;
+  let icon;
+  let buttonText;
+  let buttonLink;
+
+  // USER
+  if (type === "user") {
+    title = `Welcome to RoyalBite, ${Name}! 🎉`;
+    subtitle = "Where Every Bite Feels Royal 👑";
+
+    message = `
+            Your account has been successfully created.
+            You can now discover delicious food, explore amazing
+            restaurants, place orders, and enjoy a premium dining
+            experience right at your doorstep.
+        `;
+
+    icon = "🍽️";
+    buttonText = "Explore RoyalBite 🍴";
+    buttonLink = "https://royalbite.com/restaurants";
+  }
+
+  // PROVIDER
+  else if (type === "provider") {
+    title = `Welcome to RoyalBite, ${Name}! 🎉`;
+    subtitle = "Grow Your Business with RoyalBite 👑";
+
+    message = `
+            Your provider account has been successfully created.
+            You can now manage your services, connect with customers,
+            receive orders, and grow your business with RoyalBite.
+        `;
+
+    icon = "🙎🏻‍♂️";
+    buttonText = "Go to Provider Dashboard";
+    buttonLink = "https://royalbite.com/provider/dashboard";
+  }
+
+  // RESTAURANT
+  else if (type === "restaurant") {
+    title = `${Name} Added Successfully! 🎉`;
+    subtitle = "Welcome to the RoyalBite Family 👑";
+
+    message = `
+            Your restaurant has been successfully added to RoyalBite.
+            You can now manage your restaurant, add delicious food items,
+            manage orders, and serve your customers.
+        `;
+
+    icon = "🏤";
+    buttonText = "Manage Restaurant";
+    buttonLink = "https://royalbite.com/restaurant/dashboard";
+  }
+
+  // INVALID TYPE
+  else {
+    throw new Error("Invalid email template type");
+  }
+
+  return `
+<!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Welcome to RoyalBite</title>
+    <meta charset="UTF-8" />
+    <meta
+        Name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    />
+
+    <title>${title}</title>
 </head>
 
 <body style="
-  margin:0;
-  padding:0;
-  background-color:#F5F1E8;
-  font-family:Arial, Helvetica, sans-serif;
+    margin:0;
+    padding:0;
+    background:#F5F1E8;
+    font-family:Arial, Helvetica, sans-serif;
+    color:#333333;
 ">
 
-  <table width="100%" cellpadding="0" cellspacing="0" border="0"
-    style="background-color:#F5F1E8; padding:40px 0;">
+    <table
+        width="100%"
+        cellpadding="0"
+        cellspacing="0"
+        border="0"
+        style="
+            background:#F5F1E8;
+            padding:40px 0;
+        "
+    >
+        <tr>
+            <td align="center">
 
-    <tr>
-      <td align="center">
-
-        <!-- Main Container -->
-        <table width="600" cellpadding="0" cellspacing="0" border="0"
-          style="
-            max-width:600px;
-            width:100%;
-            background:#FFFFFF;
-            border-radius:16px;
-            overflow:hidden;
-            box-shadow:0 8px 30px rgba(20, 12, 40, 0.15);
-          ">
-
-          <!-- Royal Header -->
-          <tr>
-            <td align="center"
-              style="
-                background:#160B2E;
-                padding:40px 30px;
-                border-bottom:4px solid #D4AF37;
-              ">
-
-              <div style="
-                font-size:42px;
-                margin-bottom:10px;
-              ">
-                👑
-              </div>
-
-              <h1 style="
-                margin:0;
-                color:#D4AF37;
-                font-size:36px;
-                letter-spacing:1px;
-              ">
-                RoyalBite
-              </h1>
-
-              <p style="
-                margin:10px 0 0;
-                color:#E8D9A8;
-                font-size:14px;
-                letter-spacing:1px;
-              ">
-                WHERE EVERY BITE FEELS ROYAL
-              </p>
-
-            </td>
-          </tr>
-
-          <!-- Welcome Section -->
-          <tr>
-            <td style="padding:45px 40px 35px;">
-
-              <h2 style="
-                margin:0 0 18px;
-                color:#160B2E;
-                font-size:27px;
-              ">
-                Welcome, ${userName}! 👋
-              </h2>
-
-              <p style="
-                margin:0 0 18px;
-                color:#555555;
-                font-size:16px;
-                line-height:1.7;
-              ">
-                We're delighted to welcome you to
-                <strong style="color:#7B2CBF;">RoyalBite</strong>.
-              </p>
-
-              <p style="
-                margin:0 0 25px;
-                color:#555555;
-                font-size:16px;
-                line-height:1.7;
-              ">
-                Your account has been successfully created.
-                Get ready to discover delicious food, explore amazing
-                restaurants, and enjoy a truly royal dining experience.
-              </p>
-
-              <!-- Gold Divider -->
-              <table width="100%" cellpadding="0" cellspacing="0">
-                <tr>
-                  <td style="
-                    height:1px;
-                    background:#D4AF37;
-                    opacity:0.5;
-                  ">
-                  </td>
-                </tr>
-              </table>
-
-              <br />
-
-              <!-- CTA Button -->
-              <table cellpadding="0" cellspacing="0" border="0">
-                <tr>
-                  <td align="center"
+                <!-- Main Card -->
+                <table
+                    width="600"
+                    cellpadding="0"
+                    cellspacing="0"
+                    border="0"
                     style="
-                      background:#7B2CBF;
-                      border-radius:8px;
-                      border:2px solid #D4AF37;
-                    ">
+                        width:100%;
+                        max-width:600px;
+                        background:#FFFFFF;
+                        border-radius:16px;
+                        overflow:hidden;
+                        box-shadow:0 8px 30px rgba(20, 12, 40, 0.15);
+                    "
+                >
 
-                    <a href="{{loginUrl}}"
-                      style="
-                        display:inline-block;
-                        padding:14px 32px;
-                        color:#FFFFFF;
-                        text-decoration:none;
-                        font-size:16px;
-                        font-weight:bold;
-                        letter-spacing:0.5px;
-                      ">
-                      Explore RoyalBite 🍽️
-                    </a>
+                    <!-- Royal Header -->
+                    <tr>
+                        <td
+                            align="center"
+                            style="
+                                background:#160B2E;
+                                padding:40px 30px;
+                                border-bottom:4px solid #D4AF37;
+                            "
+                        >
 
-                  </td>
-                </tr>
-              </table>
+                            <div style="
+                                font-size:42px;
+                                line-height:1;
+                                margin-bottom:12px;
+                            ">
+                                ${icon}
+                            </div>
+
+                            <h1 style="
+                                margin:0;
+                                color:#D4AF37;
+                                font-size:36px;
+                                letter-spacing:1px;
+                            ">
+                                RoyalBite
+                            </h1>
+
+                            <p style="
+                                margin:10px 0 0;
+                                color:#E8D9A8;
+                                font-size:14px;
+                                letter-spacing:1px;
+                            ">
+                                ${subtitle}
+                            </p>
+
+                        </td>
+                    </tr>
+
+
+                    <!-- Welcome Content -->
+                    <tr>
+                        <td style="
+                            padding:45px 40px 35px;
+                        ">
+
+                            <h2 style="
+                                margin:0 0 18px;
+                                color:#160B2E;
+                                font-size:27px;
+                            ">
+                                ${title}
+                            </h2>
+
+                            <p style="
+                                margin:0 0 18px;
+                                color:#555555;
+                                font-size:16px;
+                                line-height:1.7;
+                            ">
+                                Hello <strong>${Name}</strong>,
+                            </p>
+
+                            <p style="
+                                margin:0 0 25px;
+                                color:#555555;
+                                font-size:16px;
+                                line-height:1.8;
+                            ">
+                                ${message}
+                            </p>
+
+
+                            <!-- Gold Divider -->
+                            <table
+                                width="100%"
+                                cellpadding="0"
+                                cellspacing="0"
+                            >
+                                <tr>
+                                    <td style="
+                                        height:1px;
+                                        background:#D4AF37;
+                                    ">
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <br />
+
+
+                            <!-- Success Box -->
+                            <table
+                                width="100%"
+                                cellpadding="0"
+                                cellspacing="0"
+                                border="0"
+                                style="
+                                    background:#F8F4EC;
+                                    border-radius:12px;
+                                    border:1px solid #E5D7B0;
+                                "
+                            >
+                                <tr>
+                                    <td
+                                        align="center"
+                                        style="
+                                            padding:25px;
+                                        "
+                                    >
+
+                                        <div style="
+                                            font-size:38px;
+                                            margin-bottom:10px;
+                                        ">
+                                            ✅
+                                        </div>
+
+                                        <h3 style="
+                                            margin:0 0 8px;
+                                            color:#7B2CBF;
+                                            font-size:18px;
+                                        ">
+                                            Successfully Registered
+                                        </h3>
+
+                                        <p style="
+                                            margin:0;
+                                            font-size:14px;
+                                            line-height:1.6;
+                                            color:#666666;
+                                        ">
+                                            Your ${type} is now successfully
+                                            registered with RoyalBite.
+                                        </p>
+
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <br />
+                            <br />
+
+
+                            <!-- CTA Button -->
+                            <table
+                                cellpadding="0"
+                                cellspacing="0"
+                                border="0"
+                            >
+                                <tr>
+                                    <td
+                                        align="center"
+                                        style="
+                                            background:#7B2CBF;
+                                            border-radius:8px;
+                                            border:2px solid #D4AF37;
+                                        "
+                                    >
+
+                                        <a
+                                            href="${buttonLink}"
+                                            style="
+                                                display:inline-block;
+                                                padding:14px 32px;
+                                                color:#FFFFFF;
+                                                text-decoration:none;
+                                                font-size:16px;
+                                                font-weight:bold;
+                                                letter-spacing:0.5px;
+                                            "
+                                        >
+                                            ${buttonText}
+                                        </a>
+
+                                    </td>
+                                </tr>
+                            </table>
+
+                        </td>
+                    </tr>
+
+
+                    <!-- Royal Experience -->
+                    <tr>
+                        <td style="
+                            background:#F8F4EC;
+                            padding:30px 40px;
+                            border-top:1px solid #E5D7B0;
+                            border-bottom:1px solid #E5D7B0;
+                        ">
+
+                            <h3 style="
+                                margin:0 0 22px;
+                                color:#160B2E;
+                                font-size:20px;
+                            ">
+                                ✨ Your Royal Experience
+                            </h3>
+
+                            <p style="
+                                margin:12px 0;
+                                color:#444444;
+                                font-size:14px;
+                            ">
+                                🍽️ &nbsp; Discover delicious meals
+                            </p>
+
+                            <p style="
+                                margin:12px 0;
+                                color:#444444;
+                                font-size:14px;
+                            ">
+                                🛒 &nbsp; Order your favorite food
+                            </p>
+
+                            <p style="
+                                margin:12px 0;
+                                color:#444444;
+                                font-size:14px;
+                            ">
+                                🚀 &nbsp; Enjoy fast and easy ordering
+                            </p>
+
+                            <p style="
+                                margin:12px 0;
+                                color:#444444;
+                                font-size:14px;
+                            ">
+                                ❤️ &nbsp; Save your favorite dishes
+                            </p>
+
+                        </td>
+                    </tr>
+
+
+                    <!-- Royal Quote -->
+                    <tr>
+                        <td
+                            align="center"
+                            style="
+                                background:#160B2E;
+                                padding:30px 35px;
+                            "
+                        >
+
+                            <p style="
+                                margin:0;
+                                color:#D4AF37;
+                                font-size:18px;
+                                font-style:italic;
+                                line-height:1.6;
+                            ">
+                                "Great food deserves a royal experience."
+                            </p>
+
+                        </td>
+                    </tr>
+
+
+                    <!-- Footer -->
+                    <tr>
+                        <td
+                            align="center"
+                            style="
+                                background:#0D071C;
+                                padding:25px;
+                            "
+                        >
+
+                            <p style="
+                                margin:0 0 8px;
+                                color:#FFFFFF;
+                                font-size:14px;
+                                font-weight:bold;
+                            ">
+                                👑 RoyalBite
+                            </p>
+
+                            <p style="
+                                margin:0;
+                                color:#9E94A8;
+                                font-size:12px;
+                            ">
+                                © 2026 RoyalBite. All rights reserved.
+                            </p>
+
+                            <p style="
+                                margin:10px 0 0;
+                                color:#9E94A8;
+                                font-size:12px;
+                            ">
+                                Delicious food. Premium experience.
+                            </p>
+
+                        </td>
+                    </tr>
+
+                </table>
 
             </td>
-          </tr>
-
-          <!-- Features -->
-          <tr>
-            <td style="
-              background:#F8F4EC;
-              padding:30px 40px;
-              border-top:1px solid #E5D7B0;
-              border-bottom:1px solid #E5D7B0;
-            ">
-
-              <h3 style="
-                margin:0 0 22px;
-                color:#160B2E;
-                font-size:20px;
-              ">
-                ✨ Your Royal Experience
-              </h3>
-
-              <p style="
-                margin:12px 0;
-                color:#444444;
-                font-size:14px;
-              ">
-                🍽️ &nbsp; Discover delicious meals
-              </p>
-
-              <p style="
-                margin:12px 0;
-                color:#444444;
-                font-size:14px;
-              ">
-                🛒 &nbsp; Order your favorite food
-              </p>
-
-              <p style="
-                margin:12px 0;
-                color:#444444;
-                font-size:14px;
-              ">
-                🚀 &nbsp; Enjoy fast and easy ordering
-              </p>
-
-              <p style="
-                margin:12px 0;
-                color:#444444;
-                font-size:14px;
-              ">
-                ❤️ &nbsp; Save your favorite dishes
-              </p>
-
-            </td>
-          </tr>
-
-          <!-- Royal Quote -->
-          <tr>
-            <td align="center" style="
-              background:#160B2E;
-              padding:30px 35px;
-            ">
-
-              <p style="
-                margin:0;
-                color:#D4AF37;
-                font-size:18px;
-                font-style:italic;
-                line-height:1.6;
-              ">
-                "Great food deserves a royal experience."
-              </p>
-
-            </td>
-          </tr>
-
-          <!-- Footer -->
-          <tr>
-            <td align="center" style="
-              background:#0D071C;
-              padding:25px;
-            ">
-
-              <p style="
-                margin:0 0 8px;
-                color:#FFFFFF;
-                font-size:14px;
-                font-weight:bold;
-              ">
-                👑 RoyalBite
-              </p>
-
-              <p style="
-                margin:0;
-                color:#9E94A8;
-                font-size:12px;
-              ">
-                © 2026 RoyalBite. All rights reserved.
-              </p>
-
-              <p style="
-                margin:10px 0 0;
-                color:#9E94A8;
-                font-size:12px;
-              ">
-                Delicious food. Premium experience.
-              </p>
-
-            </td>
-          </tr>
-
-        </table>
-
-      </td>
-    </tr>
-
-  </table>
+        </tr>
+    </table>
 
 </body>
-</html>`
-}
+</html>
+    `;
+};
+

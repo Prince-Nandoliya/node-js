@@ -1,6 +1,8 @@
 import User from "../model/user.model.js"
 import HttpError from "../middleware/HttpError.js"
 import providerModel from "../model/provider.model.js"
+import sendEmail from "../utils/sendEmail.js"
+import { WelComeEmailTemplate } from "../template/EmailTemplate.js"
 
 
 const addProvider = async (req, res, next) => {
@@ -34,6 +36,13 @@ const addProvider = async (req, res, next) => {
 
         User.Role = "Provider";
         await newProvider.save()
+
+
+        await sendEmail({
+            to:user.Email,
+            subject:"Welcome to RoyalBite - Provider Account",
+            html:WelComeEmailTemplate(user.Name,"provider")
+        })
 
 
         const provider = await providerModel

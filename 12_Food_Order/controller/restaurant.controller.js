@@ -1,6 +1,8 @@
 import restaurant from "../model/restaurants.model.js";
 import HttpError from "../middleware/HttpError.js";
 import cloudinary from "../config/cloudinary.js"
+import sendEmail from "../utils/sendEmail.js"
+import { WelComeEmailTemplate } from "../template/EmailTemplate.js";
 
 
 const add = async (req, res, next) => {
@@ -22,6 +24,17 @@ const add = async (req, res, next) => {
         })
 
         await newrestaurnat.save()
+
+
+        await sendEmail({
+            to: req.user.Email,
+            subject: "Restaurant Add success fully in RoyalBite",
+            html: WelComeEmailTemplate(
+                newrestaurnat.restaurantName,
+                "restaurant"
+
+            )
+        })
 
         res.status(201).json({ success: true, message: "restaurant add successfully", newrestaurnat })
 
@@ -90,13 +103,15 @@ const getall = async (req, res, next) => {
             res.status(404).json({ success: false, message: "restaurant not found" })
         }
 
-        res.status(200).json({ success: true, message: "restaurant founds", totalrestaurant: totalrestaurant, totalPages: Math.ceil(totalrestaurant / limit),
- page: page, restaurants})
+        res.status(200).json({
+            success: true, message: "restaurant founds", totalrestaurant: totalrestaurant, totalPages: Math.ceil(totalrestaurant / limit),
+            page: page, restaurants
+        })
 
 
-} catch (error) {
-    next(new HttpError(error.message))
-}
+    } catch (error) {
+        next(new HttpError(error.message))
+    }
 }
 
 

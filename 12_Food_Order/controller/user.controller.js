@@ -29,9 +29,9 @@ const add = async (req, res, next) => {
         await newuser.save()
 
         await sendEmail({
-            to:newuser.Email,
-            subject:"Welcome RoyalBite",
-            html:WelComeEmailTemplate(newuser.Name),
+            to: newuser.Email,
+            subject: "Welcome RoyalBite",
+            html: WelComeEmailTemplate(newuser.Name,"user"),
         });
 
         res.status(201).json({ success: true, message: "new user add successfully", newuser })
@@ -79,7 +79,7 @@ const getall = async (req, res, next) => {
             ]
         }
 
-        if(role){
+        if (role) {
             filter.Role = role
         }
 
@@ -91,16 +91,16 @@ const getall = async (req, res, next) => {
 
 
         const users = await User.find(filter)
-        .sort(sortOption)
-        .skip((page - 1) * limit)
-        .limit(limit)
-        .lean()
+            .sort(sortOption)
+            .skip((page - 1) * limit)
+            .limit(limit)
+            .lean()
 
-        if(users.length === 0){
-            res.status(404).json({success:false,message:"user not found"})
-        } 
+        if (users.length === 0) {
+            res.status(404).json({ success: false, message: "user not found" })
+        }
 
-        res.status(200).json({success:true,message:"user found successfully",totalUsers,totalpage:Math.ceil(totalUsers / limit),currentPage:page,users})
+        res.status(200).json({ success: true, message: "user found successfully", totalUsers, totalpage: Math.ceil(totalUsers / limit), currentPage: page, users })
 
     } catch (error) {
         next(new HttpError(error.message))
