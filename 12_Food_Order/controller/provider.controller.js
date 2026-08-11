@@ -61,5 +61,66 @@ const addProvider = async (req, res, next) => {
     }
 }
 
+const updateProvider = async (req,res,next) => {
+    try {
+        
+        const {id} = req.params
+        const {restaurantName,AccountNo} = req.body
 
-export default {addProvider}
+
+        const provider = await providerModel.findById(id)
+
+        if(!provider){
+            return next(new HttpError("provider not found",404))
+        }
+
+        if(restaurantName){
+            provider.restaurantsName = restaurantName;
+        }
+
+        if(AccountNo){
+            provider.AccountNo = AccountNo
+        }
+
+        if(req.files && req.files.length > 0){
+            provider.document = req.files.map((file) => file.path);
+            provider.cloudinary_id = req.files.map((file) => file.filename)
+        }
+
+        await provider.save()
+
+
+        const updateProvider = await providerModel
+        .findById(id)
+        .populate("providerName","Name Email")
+
+
+        res.status(200).json({success:true,message:"provider update Successfull",provider:updateProvider})
+        
+    } catch (error) {
+        next(new HttpError(error.message))
+    }
+}
+
+
+const deleteprovider = async (req,res,next) => {
+    try {
+        
+        const {id} = req.params
+
+        const provider = await providerModel.findById(id)
+
+        if(!provider){
+            return next(new HttpError("provider are not found",404))
+        }
+
+        await providerModel.findByIdAndDelete(id)
+
+        res.status(200).json({success:true,message:"provider delete successfully"})
+
+    } catch (error) {
+        next(new HttpError(error.message))
+    }
+}
+
+export default {addProvider,updateProvider,deleteprovider}
