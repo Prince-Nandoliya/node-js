@@ -29,8 +29,9 @@ const providerSchema = new mongoose.Schema({
         required: true
 
     },
-    isVerifield: {
-        type: Boolean
+    isVerified: {
+        type: Boolean,
+        default: false
     },
 }, {
     timestamps: true

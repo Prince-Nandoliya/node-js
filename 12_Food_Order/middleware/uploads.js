@@ -104,3 +104,16 @@ export const document = createUploadds({
         mimetype: ["application/pdf"]
 
 })
+
+export const categoryImage = createUploadds({
+
+     folder: "12_Food_Order/categoryImage",
+    transfomation: [
+        { height: "800", width: "800", crop: "limit" },
+        { fetch_format: "webp" },
+        { quality: "auto" },
+    ],
+
+    allowed_formats: ["jpeg", "jpg", "png", "webp"],
+    mimetype: ["image/jpeg", "image/jpg", "image/png", "image/webp"],
+})
