@@ -10,4 +10,10 @@ const router = express.Router()
 
 router.post("/addcategory",auth,categoryImage.single("categoryImage"),checkRole("admin"),FoodCategoryController.add)
 
+router.get("/all",auth,checkRole("admin"),FoodCategoryController.getall)
+
+router.delete("/delete/:id",auth,checkRole("admin"),FoodCategoryController.Delete)
+
+router.patch("/update/:id",auth,categoryImage.single("categoryImage"),FoodCategoryController.update)
+
 export default router
