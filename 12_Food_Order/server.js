@@ -13,6 +13,7 @@ import adminrouter from "./routes/admin.routes.js"
 import restaurantRouter from "./routes/restaurant.routes.js"
 import providerRouter from "./routes/Provider.routes.js"
 import categoryRouter from "./routes/FoodCategory.routes.js"
+import foodRouter from "./routes/food.routes.js"
 
 import restaurant from "./model/restaurants.model.js"
 import User from "./model/user.model.js"
@@ -35,6 +36,7 @@ app.use("/admin",adminrouter)
 app.use("/restaurant",restaurantRouter)
 app.use("/provider",providerRouter)
 app.use("/category",categoryRouter)
+app.use("/food",foodRouter)
 
 // if route not found
 app.use((req, res, next) => {

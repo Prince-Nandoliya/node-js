@@ -33,9 +33,20 @@ const foodSchema = new mongoose.Schema({
         ref: "User",
         required: true
     },
+    preparingTime:{
+        type:String,
+        min:1,
+        max:30,
+        required:true
+    },
     isVerified: {
         type: Boolean,
         default: false
+    },
+    category: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "foodCategory",
+        required: true
     }
 }, { timestamps: true })
 
