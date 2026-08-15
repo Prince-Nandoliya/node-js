@@ -4,6 +4,7 @@ import auth from "../middleware/auth.js";
 import {profilepic} from "../middleware/uploads.js";
 import validate from "../middleware/validate.js";
 import {registerSchema} from "../validation/userSchema.js";
+import {authlimiter} from "../middleware/rateLimit.js"
 import checkRole from "../middleware/CheckRole.js";
 import { updateUserSchema } from "../validation/userSchema.js";
 
@@ -13,7 +14,7 @@ const router = express.Router()
 router.post("/add", validate(registerSchema),profilepic.single("profilepic"), userController.add)
 router.get("/all",auth,checkRole("admin"),userController.getall)
 
-router.post("/login", userController.login)
+router.post("/login",authlimiter, userController.login)
 router.post("/authlogin", auth, userController.authlogin)
 
 router.get("/logout",auth,userController.logout)
