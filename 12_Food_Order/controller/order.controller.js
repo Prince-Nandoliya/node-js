@@ -1,43 +1,54 @@
-import ordermodel from "../model/order.model.js";
 import HttpError from "../middleware/HttpError.js"
-import foodModel from "../model/Food.model.js";
+import foodModel from "../model/Food.model.js"
+import ordermodel from "../model/order.model.js"
 
 
-const add = async (req, res, next) => {
+const addOrder = async (req, res, next) => {
     try {
-        const userId = req.user._id
 
-        const { Restaurant, FoodItems, DeliveryAddress, phone } = req.body
+        const { DeliveryAddress, Restaurant, FoodItems, phone } = req.body
 
-        if (!FoodItems || FoodItems.length === 0) {
-            return next(new HttpError("At least one foodItems is required", 400))
-        }
+        const CustomerName = req.user._id;
 
-        let totalAmount = 0;
+        const foodid = FoodItems.map((FoodItems) => FoodItems.food)
 
-        totalAmount += foodPrice * FoodItems.quantity
+        const food = await foodModel.find({
+            _id: { $in: foodid }
+        })
+
+        let totalAmount = 0
+
+        const orderItems = FoodItems.map((FoodItems) => {
+           const foodfound = food.find((food)=>food._id.toString() === FoodItems.food.toString())
+
+            const itemsTotal = foodfound.foodPrice * FoodItems.quantity;
 
 
-        const newOrder = await ordermodel({
-            user: userId,
-            Restaurant,
-            FoodItems,
-            totalAmount,
+            totalAmount += itemsTotal
+
+            return {
+                food: foodfound._id,
+                quantity: FoodItems.quantity
+            }
+        })
+
+        const neworder = await ordermodel.create({
             DeliveryAddress,
-            phone
+            FoodItems: orderItems,
+            Restaurant,
+            CustomerName,
+            phone,
+            totalAmount
         })
 
-        await newOrder.save()
+        res.status(201).json({ success: true, message: "order placed successfully", neworder })
 
-        res.status(201).json({
-            success: true,
-            message: "order placed successfully",
-            newOrder
-        })
+
     } catch (error) {
-        next(new HttpError(error.message, 500))
+        next(new HttpError(error.message))
 
     }
+
 }
 
-export default { add }
+export default { addOrder }
