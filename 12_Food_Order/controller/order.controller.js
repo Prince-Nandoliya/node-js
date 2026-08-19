@@ -19,7 +19,7 @@ const addOrder = async (req, res, next) => {
         let totalAmount = 0
 
         const orderItems = FoodItems.map((FoodItems) => {
-           const foodfound = food.find((food)=>food._id.toString() === FoodItems.food.toString())
+            const foodfound = food.find((food) => food._id.toString() === FoodItems.food.toString())
 
             const itemsTotal = foodfound.foodPrice * FoodItems.quantity;
 
@@ -41,7 +41,25 @@ const addOrder = async (req, res, next) => {
             totalAmount
         })
 
-        res.status(201).json({ success: true, message: "order placed successfully", neworder })
+        const orderPopulate = await neworder.populate([
+            {
+                path: "CustomerName",
+                select: "Name Email MoNumber -_id"
+
+            },
+            {
+                path: "Restaurant",
+                select: "restaurantName Address -_id"
+
+            },
+            {
+                path: "FoodItems.food",
+                select: "foodName foodPrice foodDescription -_id"
+
+            }
+        ])
+
+        res.status(201).json({ success: true, message: "order placed successfully", neworder, order: orderPopulate })
 
 
     } catch (error) {

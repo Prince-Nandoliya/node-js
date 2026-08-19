@@ -13,4 +13,6 @@ router.delete("/delete/:id",auth,checkRole("admin"),userController.deleteUser)
 
 router.get("/alluser",auth,checkRole("admin"),adminController.getAllUser)
 
+router.get("/dashboard",auth,checkRole("admin"),adminController.dashboard)
+
 export default router

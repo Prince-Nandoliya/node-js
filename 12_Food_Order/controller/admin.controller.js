@@ -2,6 +2,8 @@
 import HttpError from "../middleware/HttpError.js"
 import User from "../model/user.model.js"
 import CheckRole from "../middleware/CheckRole.js"
+import restaurant from "../model/restaurants.model.js"
+import foodModel from "../model/Food.model.js"
 
 const getAllUser = async (req, res, next) => {
     try {
@@ -44,5 +46,51 @@ const getAllUser = async (req, res, next) => {
     }
 }
 
+const dashboard = async (req, res, next) => {
+    try {
 
-export default { getAllUser }
+        //User
+        const totaluser = await User.countDocuments()
+
+        const totalcustomer = await User.countDocuments({ Role: "customer" })
+
+        const totalprovider = await User.countDocuments({ Role: "provider" })
+
+        const totalApprovedProvider = await User.countDocuments({ isVerified: true })
+
+        const totalRejectedprovider = await User.countDocuments({ isVerified: false })
+
+
+        //restaurant
+        const totalRestaurant = await restaurant.countDocuments()
+
+        const totalOpenRestaurant = await restaurant.countDocuments({ isOpen: true })
+
+        const totalCloseRestaurant = await restaurant.countDocuments({ isOpen: false })
+
+        //food
+        const totalfood = await foodModel.countDocuments()
+
+
+
+        res.status(201).json({
+            success: true,
+            message: "dashboard fetched successfully",
+            totaluser,
+            totalcustomer,
+            totalprovider,
+            totalApprovedProvider,
+            totalRejectedprovider,
+            totalRestaurant,
+            totalOpenRestaurant,
+            totalCloseRestaurant,
+            totalfood
+        })
+    } catch (error) {
+        return next(new HttpError(error.message))
+
+    }
+}
+
+
+export default { getAllUser ,dashboard}
