@@ -33,11 +33,16 @@ const foodSchema = new mongoose.Schema({
         ref: "User",
         required: true
     },
-    preparingTime:{
-        type:String,
-        min:1,
-        max:30,
-        required:true
+    preparingTime: {
+        type: String,
+        min: 1,
+        max: 30,
+        required: true
+    },
+    isAvailable: {
+        type: Boolean,
+        default: true
+
     },
     isVerified: {
         type: Boolean,

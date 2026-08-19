@@ -4,6 +4,7 @@ import User from "../model/user.model.js"
 import CheckRole from "../middleware/CheckRole.js"
 import restaurant from "../model/restaurants.model.js"
 import foodModel from "../model/Food.model.js"
+import ordermodel from "../model/order.model.js"
 
 const getAllUser = async (req, res, next) => {
     try {
@@ -71,6 +72,27 @@ const dashboard = async (req, res, next) => {
         //food
         const totalfood = await foodModel.countDocuments()
 
+        const totalApprovedfood = await foodModel.countDocuments({ isVerified: true })
+
+        const totalRejectedfood = await foodModel.countDocuments({ isVerified: false })
+
+        const totalIsAvailableFood = await foodModel.countDocuments({ isAvailable: true })
+
+        const totalIsNotAvailableFood = await foodModel.countDocuments({ isAvailable: false })
+
+
+        const totalOrder = await ordermodel.countDocuments()
+
+        const totalRevenue = await ordermodel.aggregate([
+            {
+                $group: {
+                    _id: null,
+                    revenue: { $sum: "$totalAmount" }
+
+                }
+            }
+        ])
+
 
 
         res.status(201).json({
@@ -84,7 +106,11 @@ const dashboard = async (req, res, next) => {
             totalRestaurant,
             totalOpenRestaurant,
             totalCloseRestaurant,
-            totalfood
+            totalfood,
+            totalApprovedfood,
+            totalRejectedfood,
+            totalIsAvailableFood,
+            totalIsNotAvailableFood,
         })
     } catch (error) {
         return next(new HttpError(error.message))
@@ -93,4 +119,4 @@ const dashboard = async (req, res, next) => {
 }
 
 
-export default { getAllUser ,dashboard}
+export default { getAllUser, dashboard }
