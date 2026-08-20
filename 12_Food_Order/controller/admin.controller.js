@@ -91,6 +91,17 @@ const dashboard = async (req, res, next) => {
 
                 }
             }
+        ]);
+
+
+        const orderStatus = await ordermodel.aggregate([
+
+            {
+                $group: {
+                    _id: "$orderStatus",
+                    count: { $sum: 1 },
+                }
+            }
         ])
 
 
@@ -111,6 +122,7 @@ const dashboard = async (req, res, next) => {
             totalRejectedfood,
             totalIsAvailableFood,
             totalIsNotAvailableFood,
+            orderStatus
         })
     } catch (error) {
         return next(new HttpError(error.message))
