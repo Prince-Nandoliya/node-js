@@ -2,42 +2,60 @@ import User from "../model/user.model.js";
 import HttpError from "../middleware/HttpError.js";
 
 const add = async (req, res, next) => {
-    try {
+  try {
+    const { Name, Email, Password, Address, Phone } = req.body;
 
-        const { Name, Email, Password, Address, Phone } = req.body
+    const newUser = await User({
+      Name,
+      Email,
+      Password,
+      Address,
+      Phone,
+    });
 
-        const newUser = await User({
-            Name,
-            Email,
-            Password,
-            Address,
-            Phone
-        })
+    await newUser.save();
 
-        await newUser.save()
-
-        res.status(201).json({ success: true, message: "new add successfully", newUser })
-
-    } catch (error) {
-        next(new HttpError(error.message))
-
-    }
-}
+    res
+      .status(201)
+      .json({ success: true, message: "new add successfully", newUser });
+  } catch (error) {
+    next(new HttpError(error.message));
+  }
+};
 
 const getall = async (req, res, next) => {
-    try {
+  try {
+    const alluser = await User.find({});
 
-        const alluser = await User.find({})
-
-        if (!alluser) {
-            next(new HttpError("user data are not found"))
-        }
-
-        res.status(200).json({ success: true, total: alluser.length, message: "user Data found successfully", alluser })
-
-    } catch (error) {
-        next(new HttpError(error.message))
+    if (!alluser) {
+      next(new HttpError("user data are not found"));
     }
-}
 
-export default { add, getall }
+    res.status(200).json({
+      success: true,
+      total: alluser.length,
+      message: "user Data found successfully",
+      alluser,
+    });
+  } catch (error) {
+    next(new HttpError(error.message));
+  }
+};
+
+// const deleteUser = async (req, res, next) => {
+//   try {
+//     let targetuser = req.params.id || req.User._id;
+
+//     const users = await User.findById(targetuser);
+
+//     await User.deleteOne();
+
+//     res
+//       .status(200)
+//       .json({ success: true, message: "user delete successfully" });
+//   } catch (error) {
+//     next(new HttpError(error.message))
+//   }
+// };
+
+export default { add, getall,deleteUser };
