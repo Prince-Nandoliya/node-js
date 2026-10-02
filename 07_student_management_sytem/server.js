@@ -1,13 +1,19 @@
 import express from "express";
 import HttpError from "./middleware/HttpError.js"
-import connected from "./conflig/db.js";
+import connected from "./config/db.js";
 import studentRoutes from "./Routes/studentRoutes.js"
+import cors from "cors"
+import dotenv from "dotenv"
+
 
 const all = express()
+dotenv.config("./.env")
 
+all.use(cors())
 
 all.use(express.json())
 all.use("/student",studentRoutes)
+
 
 all.get("/",(req,res)=>{
     res.send("hello form server")
