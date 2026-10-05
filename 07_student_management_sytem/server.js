@@ -1,7 +1,7 @@
 import express from "express";
 import HttpError from "./middleware/HttpError.js"
 import connected from "./config/db.js";
-import studentRoutes from "./routes/studentRoutes.js"
+import studentroutes from "./routes/studentRoutes.js"
 import cors from "cors"
 import dotenv from "dotenv"
 
@@ -12,7 +12,7 @@ dotenv.config("./.env")
 all.use(cors())
 
 all.use(express.json())
-all.use("/student",studentRoutes)
+all.use("/student",studentroutes)
 
 
 all.get("/",(req,res)=>{
