@@ -1,7 +1,7 @@
 import express from "express";
 import HttpError from "./middleware/HttpError.js"
 import connected from "./config/db.js";
-import studentRoutes from "./Routes/studentRoutes.js"
+import studentRoutes from "./routes/studentRoutes.js"
 import cors from "cors"
 import dotenv from "dotenv"
 
