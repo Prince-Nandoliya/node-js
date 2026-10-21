@@ -112,7 +112,7 @@ const Studentbyid = async (req,res) =>{
             res.status(404).json({success:false,message: "student not found"})
             
        }
-       res.status(200).json({success:true, message:"student found successfully",}) 
+       res.status(200).json({success:true, message:"student found successfully",student}) 
         
     } catch (error) {
         res.status(500).json({
