@@ -13,7 +13,7 @@ router.post("/add",uploads.single("profile_pic"),validate(registerSchema),userCo
 
 router.get("/all",userController.getall)
 
-router.get("/login",userController.login)
+router.post("/login",userController.login)
 
 router.get("/authlogin",auth,userController.authlogin)
 
