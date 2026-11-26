@@ -10,7 +10,7 @@ const router = express.Router()
 
 router.post("/add",auth,uploads.single("Blogimg"),validate(BlogSchema),BlogController.add)
 
-router.get("/all",auth,BlogController.getall)
+router.get("/all",BlogController.getall)
 
 router.delete("/delete/:id",auth,BlogController.Delete)
 
